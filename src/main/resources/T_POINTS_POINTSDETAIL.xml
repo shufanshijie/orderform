@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_POINTS_POINTSDETAIL" description="积分明细信息">
+		<id name="ID" javaType="string" uiname="ID">
+			<component type="hidden" url="#"/>
+			<queryCondition type="equal"/>
+		</id>
+		<field name="POINTSIMG" uiname="POINTSIMG" description="积分明细图片" javaType="string" nullAllowed="false" length="256" defaultValue="http://images.5proapp.com/noportrait">
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="POINTSTITLE" uiname="POINTSTITLE" description="积分名称" javaType="string" >
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="POINTSTYPE" uiname="POINTSTYPE" description="积分类型" javaType="string" nullAllowed="false" defaultValue="1">
+			<option displayName="购物送积分" value="1"/>
+			<option displayName="购物抵现" value="2"/>
+			<option displayName="退货" value="3"/>
+			<option displayName="赠送" value="4"/>
+			<option displayName="其他" value="5"/>
+			<component type="dropdown" />
+			<queryCondition type="equal"/>
+		</field>
+		<field name="POINTS" uiname="POINTS" description="积分" javaType="integer" >
+			<component type="integer"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="ORDERFORMID" uiname="ORDERFORMID" description="订单id" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="USERID" uiname="USERID" description="用户id" javaType="string">
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="POINTSDATE" uiname="POINTSDATE" description="积分时间" javaType="date" nullAllowed="true" dataStyle="yyyy-MM-dd">
+			<component type="date" colspan="3" readOnly="true"/>
+			<queryCondition type="region"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter><![CDATA[
+				order by t_1.POINTSDATE desc
+			]]></pluggedFilter>
+		</queryFilter>
+	</table>
+</Haiyan>

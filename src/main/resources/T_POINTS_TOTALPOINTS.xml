@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_POINTS_TOTALPOINTS" description="用户-总积分">
+		<id name="ID" description="用户ID" javaType="string" length="50"/>
+		<field name="POINTS" description="当前总积分" javaType="integer" length="32" >
+			<queryCondition type="equal"/>
+		</field>
+	</table>
+</Haiyan>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" output="WebContent/WEB-INF/classes-test" path="src/main/test"/>
+	<classpathentry kind="src" path="hy-common"/>
+	<classpathentry kind="src" path="hy-config"/>
+	<classpathentry kind="src" path="hy-cache"/>
+	<classpathentry kind="src" path="hy-exp"/>
+	<classpathentry kind="src" path="hy-orm"/>
+	<classpathentry excluding="haiyan/database/SybaseDatabase.java" kind="src" path="database"/>
+	<classpathentry kind="src" path="hy-web"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre7">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v7.0">
+		<attributes>
+			<attribute name="owner.project.facets" value="jst.web"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
+</classpath>

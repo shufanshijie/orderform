@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="SYSTABLE" description="矩阵表" realTable="SYSTABLE">
+		<!-- colspan="4" -->
+		<id name="ID" description="ID" javaType="string">
+			<component type="hidden" url=""/>
+		</id>
+		<!-- -->
+		<field name="CODE" description="编码" displayOnly="false" javaType="string" lazyLoad="false">
+			<!-- one2oneField="CODE" one2oneTable="TEST_ONE2ONE" -->
+			<component type="text" readOnly="false"/>
+			<queryCondition type="blurMatching"/>
+		</field>
+		<field name="NAME" description="名称" displayOnly="false" javaType="string" lazyLoad="false">
+			<!--  one2oneField="NAME" one2oneTable="TEST_ONE2ONE" -->
+			<component type="text" readOnly="false"/>
+			<queryCondition type="blurMatching"/>
+			<listColumn style="{remoteSort:true,sortName:'t_1.NAME'}"/>
+		</field>
+		<!-- -->
+		<querySQL methodName="exp"><![CDATA[
+			{(select *
+				from SYSTABLE
+				where CODE like '}&SQLSafe(GetPara(TEST))&{%')}
+		]]></querySQL>
+		<!--
+		<queryFilter>
+			<pluggedFilter methodName="exp" parameter="
+			If(InRole(sp,wm),
+				{ and t_1.ID in (select ORDER_ID from V_WM_OUTPRE  where PRODUCTID in (select ID from T_WM_SDBPRODUCT where SUPPLIER='}&amp;GetUser(SUPPLIER)&amp;{' and WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{')) },
+				{ and t_1.ID in (select ORDER_ID from V_WM_OUTPRE  where PRODUCTID in (select ID from T_WM_SDBPRODUCT where WAREHOUSE='}&amp;GetUser(WAREHOUSEID)&amp;{')) }
+			)"/>
+		</queryFilter>
+		-->
+		<!--
+		<isSelectable className="" methodName="" parameter=""/>
+		<isShowable className="" methodName="" parameter=""/>
+		-->
+		<pluginInterceptor methodName="initDB" pluginName="initDB" type="before"><![CDATA[
+			create or replace view V_SYSTABLE as
+				(select * from SYSTABLE)
+		]]></pluginInterceptor>
+		<!--
+		<pluginInterceptor methodName="exp" pluginName="save" parameter="If(IsEmpty(Get(WFBILLID)),true,DBSQL({update SYSWFBILL set BILLID='}&amp;Get(ID)&amp;{' where ID='}&amp;Get(WFBILLID)&amp;{'}))" type="after"/>
+		<pluginInterceptor methodName="exp" pluginName="edit" parameter="if(inrole(admin),true,disbtns(testSQL))" type="before"/>
+		-->
+		<!-- 
+		<pluginOperation name="testOne" oprName="查看一对一表单" hostPage="edit" tblevel="1" className="haiyan.plugin.BshPlugin" action="openWin({edit.do?__opr_data=TEST_ONE2ONE&amp;ID=}&amp;Get(ID))+break()"><![CDATA[
+		]]></pluginOperation>
+		<pluginOperation name="testSQL" oprName="调试SQL" hostPage="edit" tblevel="1" className="haiyan.plugin.BshPlugin"><![CDATA[
+		    context.getDBM().executeUpdate(form.get("TESTSQL"),null);
+		]]></pluginOperation>
+		-->
+		<!--
+		<pluginOperation name="dbtest" className="haiyan.plugin.BshPlugin" oprName="生成测试数据" hostPage="edit"><![CDATA[
+			 new java.lang.Thread(new java.lang.Runnable() {				
+				final ITableContext context = DBContextFactory.createDBContext();
+				context.setDBM();
+				public void run() {
+					try {
+						for (int i = 1; i <= 4000; i++) {
+							IRecord form = context.getDBM().createRecord();
+							form.set("CODE", "CODE_" + (Math.random()*100/100));
+							form.set("NAME", DateUtil.getLastTime());
+							try {
+								context.getDBM().insert("TEST_DBM", form, context);
+							} catch (Throwable e) {
+								throw new RuntimeException(e);
+							}
+							if (i % 1000 == 0 && i > 1) {
+								try {
+									dbm.commit();
+								} catch (Throwable e) {
+									e.printStackTrace();
+								}
+								try {
+									context.openTransaction();
+								} catch (Throwable e) {
+									e.printStackTrace();
+								}
+							}
+						}
+					} finally {
+						context.close();
+					}
+				}
+			}).start();
+		]]></pluginOperation>
+		-->
+	</table>
+	<!--
+	<table name="TEST_DBM2" description="DBM测试表单2" realTable="TEST_DBM2">
+		<id name="ID" description="ID" javaType="bigDecimal">
+			<component type="hidden" url="#"/>
+		</id>
+		<field name="CODE" description="1to1编码" displayOnly="false" javaType="string" lazyLoad="false" one2oneField="CODE" one2oneTable="TEST_ONE2ONE">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="NAME" description="1to1名称" displayOnly="false" javaType="string" lazyLoad="false" one2oneField="NAME" one2oneTable="TEST_ONE2ONE">
+			<component type="text" readOnly="false"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="WFBILLID" javaType="string" description="WFBILLID">
+			<component type="hidden"/>
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field>
+		<querySQL methodName="exp"><![CDATA[
+			{(select ID, CODE, NAME, WFBILLID, HYVERSION
+				from TEST_DBM2
+				where CODE not like '}&SQLSafe(GetPara(TEST))&{%')}
+		]]></querySQL>
+		<isShowable className="" methodName="isShowable" parameter=""/>
+		<pluginInterceptor methodName="bsh" pluginName="test" parameter="TEST_DBM.bsh" type="before"/>
+		<pluginInterceptor methodName="bsh" pluginName="test2" parameter="TEST_DBM2.bsh" type="before"/>
+		<pluginOperation name="test" oprName="test" hostPage="query" tblevel="1"><![CDATA[
+		]]></pluginOperation>
+		<pluginOperation name="test2" oprName="test2" hostPage="query" tblevel="1"><![CDATA[
+		]]></pluginOperation>
+	</table>
+	-->
+</Haiyan>

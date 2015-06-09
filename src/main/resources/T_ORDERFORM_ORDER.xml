@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="T_ORDERFORM_ORDER" description="订单信息">
+		<id name="ID" javaType="string" uiname="ID" description="订单编号">
+			<component type="hidden" url="#"/>
+			<queryCondition type="equal"/>
+		</id>
+		<field name="IMAGE" uiname="IMAGE" description="订单图片" javaType="string" nullAllowed="false" length="256" defaultValue="http://images.5proapp.com/noportrait">
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="NAME" uiname="NAME" description="订单名称" javaType="string" >
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="STATUS" uiname="STATUS" description="订单状态" javaType="string" nullAllowed="false" defaultValue="INIITIAL">
+			<option displayName="初始状态" value="INIITIAL"/>
+			<option displayName="未支付状态" value="UNPAID"/>
+			<option displayName="已支付状态" value="PAID"/>
+			<option displayName="生产中" value="PRODUCTION"/>
+			<option displayName="配送中" value="DISPATCHING"/>
+			<option displayName="已收货" value="RECEIPT"/>
+			<option displayName="取消订单" value="CANCEL"/>
+			<option displayName="退款中" value="REFUND"/>
+			<component type="dropdown" />
+			<queryCondition type="equal"/>
+		</field>
+		<field name="DISPATCHINGADDRESS" uiname="DISPATCHINGADDRESS" description="订单配送地址" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="DISPATCHINGDATE" uiname="DISPATCHINGDATE" description="送货时间" javaType="date" nullAllowed="true" dataStyle="yyyy-MM-dd">
+			<component type="date" colspan="3" readOnly="true"/>
+			<queryCondition type="region"/>
+		</field>
+		<field name="DISPATCHINGTYPE" uiname="DISPATCHINGTYPE" description="配送方式" javaType="string" nullAllowed="false" defaultValue="0">
+			<option displayName="自提" value="0"/>
+			<option displayName="送货上门" value="1"/>
+			<component type="dropdown" />
+			<queryCondition type="equal"/>
+		</field>
+		<field name="PRODUCTIDS" uiname="PRODUCTIDS" description="产品ids" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="TOTALPRICE" uiname="TOTALPRICE" description="订单总价" javaType="bigDecimal" >
+			<component type="bigDecimal"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="CONSUMEPOINTS" uiname="CONSUMEPOINTS" description="抵用积分" javaType="integer" >
+			<component type="integer"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="POINTSTYPE" uiname="POINTSTYPE" description="积分类型" javaType="string" nullAllowed="false" defaultValue="4">
+			<option displayName="购物送积分" value="0"/>
+			<option displayName="购物抵现" value="1"/>
+			<option displayName="退货" value="2"/>
+			<option displayName="赠送" value="3"/>
+			<option displayName="其他" value="4"/>
+			<component type="dropdown" />
+			<queryCondition type="equal"/>
+		</field>
+		<field name="USERID" uiname="USERID" description="用户id" javaType="string">
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="PAYNO" uiname="PAYNO" description="支付交易号" javaType="string">
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="CREATEDATE" uiname="CREATEDATE" description="创建时间" javaType="date" nullAllowed="true" dataStyle="yyyy-MM-dd">
+			<component type="date" colspan="3" readOnly="true"/>
+			<queryCondition type="region"/>
+		</field>
+		<field name="PAYDATE" uiname="PAYDATE" description="支付时间" javaType="date" nullAllowed="true" dataStyle="yyyy-MM-dd">
+			<component type="date" colspan="3" readOnly="true"/>
+			<queryCondition type="region"/>
+		</field>
+		<field name="DEALDATE" uiname="DEALDATE" description="交易时间" javaType="date" nullAllowed="true" dataStyle="yyyy-MM-dd">
+			<component type="date" colspan="3" readOnly="true"/>
+			<queryCondition type="region"/>
+		</field>
+		<queryFilter>
+			<pluggedFilter><![CDATA[
+				order by t_1.CREATEDATE desc
+			]]></pluggedFilter>
+		</queryFilter>
+	</table>
+</Haiyan>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
+	<table name="SYSOPERATOR" description="人员">
+		<id name="ID" javaType="string" uiname="ID">
+			<component type="hidden" url="#"/>
+			<queryCondition type="equal"/>
+		</id>
+		<field name="CODE" uiname="CODE" description="登录名" javaType="string" nullAllowed="true">
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="PORTRAIT" uiname="PORTRAIT" description="头像" javaType="string" nullAllowed="false" length="256" defaultValue="http://images.5proapp.com/noportrait">
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="BUSINESSCARD" uiname="BUSINESSCARD" description="名片" javaType="string" nullAllowed="true" length="256">
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="BUSINESSLICENCE" uiname="BUSINESSLICENCE" description="营业执照" javaType="string" nullAllowed="true" length="256">
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="SELFINTRODUCTION" uiname="SELFINTRODUCTION" description="自我介绍" javaType="string" nullAllowed="true" safeHtml="true" length="2048">
+			<component type="text"/>
+		</field>
+		<field name="RIGHTS" uiname="RIGHTS" description="权限" javaType="string" nullAllowed="true" defaultValue="GUEST">
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="NAME" uiname="NAME" description="用户名" javaType="string" safeHtml="true" >
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="REALNAME" uiname="REALNAME" description="姓名" javaType="string" nullAllowed="true" safeHtml="true">
+			<component type="text"/>
+		</field>
+		<field name="PASSWORD" uiname="PASSWORD" description="密码" javaType="string" createable="true" updateable="true" >
+			<component type="hidden"/>
+			<queryCondition type="equal"/>
+		</field>
+		<!--field name="PASSWORD2" description="确认密码" javaType="string" displayOnly="true">
+			<component type="hidden"/>
+		</field-->
+		<!--field name="ROLE" description="角色" javaType="string" displayOnly="true" mappingTable="SYSUSERROLE" referenceTable="SYSROLE" referenceField="ID" displayReferenceField="NAME" multipleSelect="true">
+			<component type="combo" />
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field-->
+		<!--field name="CHILDREN" description="管辖人员" javaType="string" displayOnly="true" mappingTable="SYSUSERUSER" referenceTable="SYSOPERATOR_CHILDREN" referenceField="ID" displayReferenceField="NAME" multipleSelect="true">
+			<component type="combo" />
+			<queryCondition type="none"/>
+			<listColumn noquery="true"/>
+		</field-->
+		<field name="SEX" uiname="SEX" description="性别" javaType="string" nullAllowed="true">
+			<option displayName="MALE" value="MALE"/>
+			<option displayName="FEMALE" value="FEMALE"/>
+			<option displayName="OTHER" value="OTHER"/>
+			<component type="dropdown" />
+			<queryCondition type="equal"/>
+		</field>
+		<field name="USED" uiname="USED" description="是否使用" javaType="string" defaultValue="1" nullAllowed="false">
+			<option displayName="是" value="1"/>
+			<option displayName="否" value="0"/>
+			<component type="dropdown" />
+			<queryCondition type="equal"/>
+		</field>
+		<field name="EMAIL" uiname="EMAIL" description="EMAIL" javaType="string" safeHtml="true">
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="YEARS_OLD" uiname="YEARS_OLD" description="年龄" javaType="string">
+			<component type="text"/>
+		</field>
+		<field name="COUNTRYCODE" uiname="COUNTRYCODE" description="国际区号" javaType="string">
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="COUNTRY" uiname="COUNTRY" description="国家" javaType="string">
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="MOBILE" uiname="MOBILE" description="手机" javaType="string">
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="LANGUAGENAME" uiname="LANGUAGENAME" description="语言" javaType="string">
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="IDENTIFYINGCODE" uiname="IDENTIFYINGCODE" description="验证码" javaType="string">
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="FOLLOWER" uiname="FOLLOWER" description="跟随者数量" javaType="integer"  defaultValue="0">
+			<component type="text"/>
+		</field>
+		<field name="FOLLOW" uiname="FOLLOW" description="跟随的数量" javaType="integer"  defaultValue="0">
+			<component type="text"/>
+		</field>
+		<field name="FAVORITE" uiname="FAVORITE" description="喜欢的商品数量" javaType="integer"  defaultValue="0">
+			<component type="text"/>
+		</field>
+		<field name="PRODUCT" uiname="PRODUCT" description="发布商品数量" javaType="integer"  defaultValue="0">
+			<component type="text"/>
+		</field>
+		<field name="POSITION" uiname="POSITION" description="地理位置" javaType="string"  defaultValue="0,0" length="255">
+			<component type="text"/>
+		</field>
+		<field name="ADDRESS" uiname="ADDRESS" description="地址" javaType="string"  defaultValue="0,0" length="255">
+			<component type="text"/>
+		</field>
+		<!--field name="ORGAID" description="所属部门" javaType="string">
+			<component type="combo" referenceTable="SYSORGA" quickQueryConditionField="NAME,CODE" displayReferenceField="NAME" referenceField="ID"/>
+		</field-->
+		<!--
+		<field name="NOLONGERUSE" description="不再使用" javaType="string">
+			<component type="dropdown" defaultValue="0" colspan="3">
+				<option displayName="是" value="1"/>
+				<option displayName="否" value="0"/>
+			</component>
+		</field>
+		-->
+		<javascript hostPage="ids"><![CDATA[
+			Hy.onReady(function(){
+				if (typeof(__grid)!='undefined') 
+					__grid.getView().getRowClass=function(rec, rowIndex, rowParams, store){
+						if (rec.get('USED')=='0') {
+							return 'x-gray readOnly';
+						} else {
+							return '';
+						}
+					}
+			});
+		]]></javascript>
+		<pluginInterceptor methodName="exp" parameter="If(IsEmpty(Get(ID)),Warning({Error}),DBSQL({update SYSOPERATOR set PASSWORD='D033E22AE348AEB566FC214AEC3585C4DA997' where ID='}&amp;Get(ID)&amp;{'}))" pluginName="reset" type="before"/>
+		<pluginInterceptor className="haiyan.interceptor.FlowmisInterceptor" methodName="transPassword" pluginName="save" type="before"/>
+		<pluginOperation name="reset" oprName="重置密码" hostPage="edit" tblevel="2" img="reset" action="plugin({},{reset})+brk()"/>
+		<Operation selectedHidden="true" queryPageQueryEdit="true" queryPageDelete="false"/>
+	</table>
+</Haiyan>
