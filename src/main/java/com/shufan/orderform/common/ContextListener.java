@@ -1,7 +1,7 @@
 package com.shufan.orderform.common;
 
 import haiyan.cache.CacheUtil;
-import haiyan.cache.RedisStringDataCacheRemote;
+import haiyan.cache.RedisStringDataCache;
 import haiyan.common.DebugUtil;
 import haiyan.common.LogUtil;
 import haiyan.common.PropUtil;
@@ -68,7 +68,7 @@ public class ContextListener implements ServletContextListener {
 		IDataCache cache = null;
 		if (USE_CACHE) {
 //			cache = new RedisBinaryDataCacheRemote();
-			cache = new RedisStringDataCacheRemote();//此缓存存取都是string
+			cache = new RedisStringDataCache();//此缓存存取都是string
 			String servers = PropUtil.getProperty("REDISCACHE.SERVERS");
 			cache.setServers(servers.split(";"));
 	    	try {
