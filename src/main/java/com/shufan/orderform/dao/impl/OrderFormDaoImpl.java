@@ -6,10 +6,10 @@ import haiyan.common.intf.database.orm.IDBRecord;
 import haiyan.common.intf.database.orm.IDBResultSet;
 import haiyan.common.intf.session.IContext;
 import haiyan.config.castorgen.Table;
-import haiyan.config.intf.database.ITableDBManager;
-import haiyan.config.intf.session.ITableDBContext;
 import haiyan.config.util.ConfigUtil;
-import haiyan.orm.database.DBContextFactory;
+import haiyan.orm.database.TableDBContextFactory;
+import haiyan.orm.intf.database.ITableDBManager;
+import haiyan.orm.intf.session.ITableDBContext;
 
 import com.shufan.orderform.dao.OrderFormDao;
 
@@ -39,7 +39,7 @@ public class OrderFormDaoImpl implements OrderFormDao {
 		ITableDBContext context = null;
 		ITableDBManager dbm = null;
 		try {
-			context = DBContextFactory.createDBContext(parentContext);
+			context = TableDBContextFactory.createDBContext(parentContext);
 			dbm = context.getDBM();
 			IDBRecord record = dbm.createRecord();
 			record.set("USERID", userId);
@@ -58,7 +58,7 @@ public class OrderFormDaoImpl implements OrderFormDao {
 		ITableDBContext context = null;
 		ITableDBManager dbm = null;
 		try {
-			context = DBContextFactory.createDBContext(parentContext);
+			context = TableDBContextFactory.createDBContext(parentContext);
 			dbm = context.getDBM();
 			IDBRecord record = dbm.select(context, getOrderFormTable(), orderId);
 			return record;
@@ -75,7 +75,7 @@ public class OrderFormDaoImpl implements OrderFormDao {
 		ITableDBContext context = null;
 		ITableDBManager dbm = null;
 		try {
-			context = DBContextFactory.createDBContext(parentContext);
+			context = TableDBContextFactory.createDBContext(parentContext);
 			dbm = context.getDBM();
 			IDBRecord record = dbm.insert(context, getOrderFormTable(), orderForm);
 			return record;
@@ -92,7 +92,7 @@ public class OrderFormDaoImpl implements OrderFormDao {
 		ITableDBContext context = null;
 		ITableDBManager dbm = null;
 		try {
-			context = DBContextFactory.createDBContext(parentContext);
+			context = TableDBContextFactory.createDBContext(parentContext);
 			dbm = context.getDBM();
 			IDBRecord record = dbm.update(context, getOrderFormTable(), orderForm);
 			return record;
@@ -109,7 +109,7 @@ public class OrderFormDaoImpl implements OrderFormDao {
 		ITableDBContext context = null;
 		ITableDBManager dbm = null;
 		try {
-			context = DBContextFactory.createDBContext(parentContext);
+			context = TableDBContextFactory.createDBContext(parentContext);
 			dbm = context.getDBM();
 			boolean record = dbm.delete(context, getOrderFormTable(), orderFormIds);
 			return record;
