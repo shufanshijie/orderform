@@ -26,13 +26,13 @@
 	<bean id="viewResolver" class="com.shufan.orderform.viewresolver.MultiViewResolver">
 		<property name="resolvers">
 			<map>
-				<entry key="jsp">
-					<bean id ="jspViewResolver" class= "org.springframework.web.servlet.view.InternalResourceViewResolver" >
+				<entry key="html">
+					<bean id ="htmlViewResolver" class= "org.springframework.web.servlet.view.InternalResourceViewResolver" >
 						<property name ="prefix">
 							<value>/</value>
 						</property>
 						<property name ="suffix">
-							<value>.jsp</value>
+							<value>.html</value>
 						</property >
 					</bean >
 				</entry>

@@ -46,9 +46,9 @@
 <meta name="apple-mobile-web-app-title" content="餐餐">
 
 	
-<link href="http://localhost:8080/orderform/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="http://localhost:8080/orderform/css/kenel.css">
-<link rel="stylesheet" href="http://localhost:8080/orderform/css/smart.css">
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="css/kenel.css">
+<link rel="stylesheet" href="css/smart.css">
 </head>
 
 <body class="ng-scope">
@@ -57,28 +57,19 @@
 		<h1 class="header-title ng-binding">订单查看</h1>
 	</header>
 	<div class="center_content">
-		<h2 class="order_date">$head.CREATEDATE</h2>
-		<img class="order_img" src="$head.IMAGE">
-		<div class="advertorial">
-			#foreach($meal in $detail)
-			<div class="order_detail">
-				<img alt="" src="$meal.IMAGE">
-				<span>$meal.NAME</span>
-				<span>$meal.DISPATCHINGDATE</span>
-				<span>$meal.TOTALPRICE</span>
-			</div>
-			#end
-		</div>
+		<h2 class="order_date">2015-9-9</h2>
+		<img class="order_img" src="a.png">
+		<div class="advertorial">软文内容</div>
 		<div class="shipping_address">
-			$head.DISPATCHINGADDRESS
+			收货地址
 		</div>		
 	</div>		
 	<footer class="eleme-footer-virtual">
 		<a class="btn btn-danger btn-footer">取消订单</a>
 	</footer>
 </div>
-<script type="text/javascript" src="http://localhost:8080/orderform/js/jquery-2.1.4.js"></script>
-<script type="text/javascript" src="http://localhost:8080/orderform/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="http://localhost:8080/orderform/js/meat.js"></script>
+<script type="text/javascript" src="js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/meat.js"></script>
 </body>
 </html>

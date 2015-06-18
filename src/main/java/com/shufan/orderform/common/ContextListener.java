@@ -98,7 +98,7 @@ public class ContextListener implements ServletContextListener {
 		}
 		String[] configNames = new String[]{
 				"SYS.xml","SYSCACHE.xml","SYSORGA.xml","SYSROLE.xml","SYSOPERATOR.xml","SYSUSERROLE.xml"
-				,"T_ORDERFORM_ORDER.xml"};
+				,"T_ORDERFORM_ORDER.xml","T_ORDERFORM_ORDER_DETAIL.xml"};
 		for (String configName:configNames) {
 			URL url = ContextListener.class.getClassLoader().getResource(configName);
 			if (url==null)
@@ -108,6 +108,16 @@ public class ContextListener implements ServletContextListener {
 				throw new RuntimeException("file not found:"+file.getAbsolutePath());
 			}
 			ConfigUtil.loadTableConfig(file, true);
+		}
+		{//初始化Bill
+			URL url = ContextListener.class.getClassLoader().getResource("B_ORDERFROM_ORDER.xml");
+			if (url==null)
+				throw new RuntimeException("config not found:"+"B_ORDERFROM_ORDER.xml");
+			file = new File(url.getPath());
+			if (!file.exists()) {
+				throw new RuntimeException("file not found:"+file.getAbsolutePath());
+			}
+			ConfigUtil.loadBillConfig(file, true);
 		}
 	}
 

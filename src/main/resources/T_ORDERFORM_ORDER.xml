@@ -5,11 +5,11 @@
 			<component type="hidden" url="#"/>
 			<queryCondition type="equal"/>
 		</id>
-		<field name="IMAGE" uiname="IMAGE" description="订单图片" javaType="string" nullAllowed="false" length="256" defaultValue="http://images.5proapp.com/noportrait">
+		<field name="IMAGE" uiname="IMAGE" description="订单列表图片" javaType="string" nullAllowed="false" length="256" defaultValue="http://images.5proapp.com/noportrait">
 			<component type="text"/>
 			<queryCondition type="equal"/>
 		</field>
-		<field name="NAME" uiname="NAME" description="订单名称" javaType="string" >
+		<field name="NAME" uiname="NAME" description="订单列表名称" javaType="string" >
 			<component type="text"/>
 			<queryCondition type="equal"/>
 		</field>
@@ -37,9 +37,6 @@
 			<option displayName="送货上门" value="1"/>
 			<component type="dropdown" />
 			<queryCondition type="equal"/>
-		</field>
-		<field name="PRODUCTIDS" uiname="PRODUCTIDS" description="产品ids" javaType="string">
-			<component type="text"/>
 		</field>
 		<field name="TOTALPRICE" uiname="TOTALPRICE" description="订单总价" javaType="bigDecimal" >
 			<component type="bigDecimal"/>

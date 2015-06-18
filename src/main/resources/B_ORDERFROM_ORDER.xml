@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Haiyan xsi:noNamespaceSchemaLocation="../haiyan-config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<bill name="B_ORDERFROM_ORDER" description="订单单据">
+		<billTable name="T_ORDERFORM_ORDER" dbName="T_ORDERFORM_ORDER" description="订单主表" tableIndex="0" />
+		<billTable name="T_ORDERFORM_ORDER_DETAIL" dbName="T_ORDERFORM_ORDER_DETAIL" description="订单明细表" tableIndex="1" />
+		<billID name="ID" dbName="ID" description="订单Id" tableIndex="0"/>
+		<billID name="ORDERID" dbName="ORDERID" description="订单ID" tableIndex="1"/>
+		<billField name="STATUS" dbName="STATUS"  description="订单状态" tableIndex="0" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="ORDERIMAGE" dbName="IMAGE"  description="订单图片" tableIndex="0" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="ORDERNAME" dbName="NAME"  description="订单名称" tableIndex="0" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="DISPATCHINGADDRESS" dbName="DISPATCHINGADDRESS"  description="订单配送地址" tableIndex="0" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="DISPATCHINGDATE" dbName="DISPATCHINGDATE"  description="订单配送时间" tableIndex="0" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="DISPATCHINGTYPE" dbName="DISPATCHINGTYPE"  description="订单配送方式" tableIndex="0" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="TOTALPRICE" dbName="TOTALPRICE"  description="订单总价" tableIndex="0" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="CONSUMEPOINTS" dbName="CONSUMEPOINTS"  description="抵用积分" tableIndex="0" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="POINTSTYPE" dbName="POINTSTYPE"  description="积分类型" tableIndex="0" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="USERID" dbName="USERID"  description="用户id" tableIndex="0" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="PAYNO" dbName="PAYNO"  description="支付交易号" tableIndex="0" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="CREATEDATE" dbName="CREATEDATE"  description="创建时间" tableIndex="0" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="PAYDATE" dbName="PAYDATE"  description="支付时间" tableIndex="0" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="DEALDATE" dbName="DEALDATE"  description="收货时间" tableIndex="0" >
+			<listColumn noquery="true"/>
+		</billField>
+		
+		<billField name="MEALIMAGE" dbName="IMAGE"  description="套餐图片" tableIndex="1" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="NAME" dbName="NAME"  description="套餐名称" tableIndex="1" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="COUNT" dbName="COUNT"  description="订购数量" tableIndex="1" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="DISPATCHINGADDRESS" dbName="DISPATCHINGADDRESS"  description="配送地址" tableIndex="1" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="DISPATCHINGDATE" dbName="DISPATCHINGDATE"  description="送货时间" tableIndex="1" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="DISPATCHINGTYPE" dbName="DISPATCHINGTYPE"  description="送货方式" tableIndex="1" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="PRICE" dbName="PRICE"  description="套餐价格" tableIndex="1" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="REALPRICE" dbName="REALPRICE"  description="套餐成交价格" tableIndex="1" >
+			<listColumn noquery="true"/>
+		</billField>
+		<pluginInterceptor className="haiyan.interceptor.ConfigInterceptor" methodName="exp" pluginName="initBill" type="before"/>
+	</bill>
+</Haiyan>
