@@ -1,0 +1,80 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+@charset "UTF-8"; 
+.center_content{
+	height: 100%;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+.order_date{
+	margin-top:20px;
+	width: 100%;
+	text-align: center;
+}
+.tip_2code{
+	text-align:center;
+	width: 100%;
+}
+.img_2code{
+	margin-left: 10%;
+	margin-right: 10%;
+	width: 80%;
+	height: 260px;
+	text-align: center;
+}
+.today_combo{
+	margin-top:20px;
+	background-color:rgb(232,232,232);
+	width: 100%;
+	height: 100px;
+}
+</style>
+<meta charset="utf-8">
+<meta http-equiv="cleartype" content="on">
+<meta name="description">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+<meta name="format-detection" content="telephone=no, email=no">
+<meta name="apple-itunes-app" content="app-id=507161324">
+<title></title>
+<meta name="msapplication-TileImage" content="//static11.elemecdn.com/touch-icon-310x310-precomposed.png">
+<meta name="msapplication-TileColor" content="#3199e8">
+
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="餐餐">
+
+	
+<link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../css/kenel.css">
+<link rel="stylesheet" href="../css/smart.css">
+</head>
+
+<body class="ng-scope">
+	<div class="ng-scope">
+		<header class="eleme-header ng-scope">
+		<h1 class="header-title ng-binding">今日领取码</h1>
+	</header>
+	<div class="center_content">
+		<h2 class="order_date">$!orderForm.DISPATCHINGDATE</h2>
+		<h1 class="tip_2code">今日取餐码，请给您的配送小哥扫描</h1>
+		<div class="img_2code" info=$orderId></div>
+		<div class="today_combo">
+		今日早餐:<br /><span>$!orderForm.NAME</span>
+		</div>
+	</div>		
+</div>
+<script type="text/javascript" src="../js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/meat.js"></script>
+<script type="text/javascript" src="../js/jquery.qrcode.min.js"></script>
+<script>
+	jQuery(function(){
+		jQuery('.img_2code').qrcode(jQuery('.img_2code').attr('info'));
+	});
+</script>
+</body>
+</html>
