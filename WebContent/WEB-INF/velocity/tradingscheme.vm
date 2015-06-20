@@ -1,0 +1,225 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+@charset "UTF-8";
+.tower_place{
+	color: black;
+	float: left;
+	margin-left: 20px;
+}
+.change_place{
+	float: right;
+	margin-right: 20px;
+}
+.meat_type{
+	overflow: hidden;
+}
+.contact_item{
+	height:40px;
+	line-height:40px;
+	border-bottom: 1px solid #ddd;
+}
+.contact_item span{
+	margin-left:20px;
+	margin-right:20px;
+}
+.grst-filter-toggle{
+	background-color: rgb(232,232,232) !important;
+}
+.simple_comboSet{
+	overflow-x: hidden;
+	height:150px;
+	background-color: rgb(252,252,252);
+}
+.simple_comboSet span{
+	margin-left: 20px;
+	margin-right: 20px;
+}
+.set_num{
+	margin-right: 20px;
+	float: right;
+}
+.set_item{
+	height: 30px;
+	line-height: 30px;
+}
+.summarizing{
+	margin-top: 20px;
+	margin-left: 20px;
+	margin-right: 20px;
+}
+.gongji{
+	display:block;
+	width: 100%;
+}
+.zhanghaoyue{
+	display:block;
+	width: 100%;
+}
+.take_food_ways{
+	display:none;
+	position: absolute;
+	border-radius:0 0 10px 10px;
+	width:100%;
+	background-color: rgb(255,255,255);
+	text-align: center;
+	filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=3);/*ie*/
+	-moz-box-shadow: 2px 2px 10px #909090;/*firefox*/
+	-webkit-box-shadow: 2px 2px 10px #909090;/*safari或chrome*/
+	box-shadow:2px 2px 10px #909090;/*opera或ie9*/
+}
+.take_food_ways li{
+	
+	line-height:40px;
+	height:40px;
+	border-bottom: 1px solid #ddd;
+}
+.contact_you{
+	background-color: rgb(252,252,252);
+}
+</style>
+<meta charset="utf-8">
+<meta http-equiv="cleartype" content="on">
+<meta name="description">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+<meta name="format-detection" content="telephone=no, email=no">
+<meta name="apple-itunes-app" content="app-id=507161324">
+<title></title>
+<meta name="msapplication-TileImage"
+	content="//static11.elemecdn.com/touch-icon-310x310-precomposed.png">
+<meta name="msapplication-TileColor" content="#3199e8">
+
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style"
+	content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="餐餐">
+
+
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"
+	type="text/css">
+<link rel="stylesheet" href="css/kenel.css">
+<link rel="stylesheet" href="css/smart.css">
+</head>
+
+<body class="ng-scope">
+	<div class="ng-scope transport_blok">
+		<header class="eleme-header ng-scope">
+			<a class="header-menu page_back" role="button"> 返回 </a>
+			<h1 class="header-title ng-binding">民生银行西门自提餐点</h1>
+		</header>
+		<script type="text/javascript">
+			
+		</script>
+
+		<div class="center_content">
+			<div class="ng-scope">
+
+				<div class="ng-scope">
+					<div class="geo-rst-filter ng-scope">
+						<div class="grst-filter-toggle meat_type" >
+							<span class="tower_place">您的大楼:凌空Soho</span>
+							<a class="change_place" href="#">更换</a>
+						</div>
+					</div>
+					<ul class="take_food_ways">
+						<li class="take_food_item take_tower">您的大楼:凌空Soho</li>
+						<li class="take_food_item take_point">蹲点取餐</li>
+					</ul>
+				</div>
+				
+				<div class="contact_you">
+					<!--<li class="contact_item"><span class="addon">楼宇</span><div class="item_value"></div></li>-->
+					<form class="PageOff" action="http://localhost:8080/orderform/orderForm_pay" method="post">
+						<input type="hidden" name="name" value="XXXX">
+						<div class="input-group">
+					         <span class="input-group-addon">楼宇　</span>
+					         <input type="text" class="form-control" placeholder="楼宇" name="DISPATCHINGADDRESS>
+					      </div>
+					       <div class="input-group">
+					         <span class="input-group-addon">时间　</span>
+					         <input type="text" class="form-control" placeholder="时间"  name="DISPATCHINGDATE">
+					      </div>
+						<div class="input-group">
+					         <span class="input-group-addon">手机　</span>
+					         <input type="text" class="form-control" placeholder="手机" name="MOBILE">
+					      </div>
+					       <div class="input-group">
+					         <span class="input-group-addon">收餐人</span>
+					         <input type="text" class="form-control" placeholder="收餐人" name="USERNAME">
+					      </div>
+					</form>
+				     
+				     
+				</div>
+				<div class="cut-off-line"></div>
+			    <ul class="simple_comboSet">
+			    	#foreach($combo in $comboList)	
+			     		<li class="set_item"><span class="SetContent" price="$combo.price">$combo.DISPATCHINGDATE $combo.week：$combo.name</span><span class="set_num">$combo.COUNT份</span></li>
+			     	#end
+			     </ul>
+			     <form class="submitPageOff" action="http://localhost:8080/orderform/orderForm/complete" method="post" style="display: none;">
+					<input type="hidden" name="addr" value="">
+					<input type="hidden" name="content" value="">
+				</form>
+				
+			     <div class="summarizing">
+			     	<span class="gongji">共计：30元</span>
+			     	<span class="zhanghaoyue">帐号余额：180元</span>
+			     </div>
+			</div>
+		</div>
+
+		<footer class="eleme-footer-virtual">
+			<a href="javascript:void(0);" class="btn btn-info btn-footer">去付款</a>
+		</footer>		
+
+	</div>
+
+	<script type="text/javascript" src="js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/jquery.endless-scroll.js"></script>
+	<script type="text/javascript" src="js/meat.js"></script>
+	<script type="text/javascript">
+		$(document).click(function(event){
+				if($(event.target).hasClass('change_place')){
+					$('.take_food_ways').show();
+				}
+				if($(event.target).hasClass('take_food_item')){
+					var choised=$(event.target).html();
+					if($(event.target).hasClass('take_point')){
+						$('.contact_you').hide();
+					}else if($(event.target).hasClass('take_tower')){
+						$('.contact_you').show();
+					}
+					$('.tower_place').html(choised);
+					$('.take_food_ways').hide();
+				}
+				if($(event.target).hasClass('btn-footer')){
+					$('.PageOff').submit();
+				}
+				
+		});
+		
+		$(function() {
+			$('.simple_comboSet').scrollTop(100);
+			var combos = $("ul.simple_comboSet").clone().find("li");
+			$('.simple_comboSet')
+					.endlessScroll(
+							{
+								pagesToKeep : 8,
+								inflowPixels :10,
+								fireDelay : 10,
+								content : function(i, p, d) {
+									console.log(i, p, d);
+									return combos[Math.floor(Math.random() * 7)].outerHTML;
+								}
+							});
+		});
+	</script>
+</body>
+</html>
