@@ -18,6 +18,9 @@ import java.net.URL;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.apache.velocity.app.Velocity;
+import org.apache.velocity.app.VelocityEngine;
+
 
 public class ContextListener implements ServletContextListener {
 
@@ -37,7 +40,12 @@ public class ContextListener implements ServletContextListener {
 		initLogger();
 		initCache();
 		initTables(webInfPath);
+		initVelocity(webInfPath);
 		DebugUtil.debug("contextInitialized");
+	}
+	private static void initVelocity(String webInfPath) {
+		Velocity.setProperty(VelocityEngine.FILE_RESOURCE_LOADER_PATH, webInfPath+File.separator+"velocity");
+		Velocity.init();
 	}
 	private static void initLogger() {
 		if (USE_DEVLOGGER==false)
