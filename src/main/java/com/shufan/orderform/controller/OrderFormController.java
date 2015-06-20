@@ -1,16 +1,33 @@
 package com.shufan.orderform.controller;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+
+import haiyan.bill.database.DBBill;
 import haiyan.common.CloseUtil;
 import haiyan.common.exception.Warning;
+import haiyan.common.intf.database.IDBBill;
 import haiyan.common.intf.database.orm.IDBRecord;
 import haiyan.common.intf.database.orm.IDBResultSet;
 import haiyan.common.intf.web.IWebContext;
+import haiyan.orm.database.DBPage;
 import haiyan.web.orm.RequestRecord;
 import haiyan.web.session.WebContextFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,12 +86,70 @@ public class OrderFormController {
 			CloseUtil.close(context);
 		}
 	}	
+	@RequestMapping(value = "orderForm_complete", method = RequestMethod.POST)
+	public void completeOrderForm(HttpServletRequest req, HttpServletResponse res){
+		IWebContext context = null;
+		PrintWriter writer = null;
+		try{
+//			context = WebContextFactory.createDBContext(req, res);
+			OrderFormDao dao = new OrderFormDaoImpl(context);
+			String content=req.getParameter("content");
+			String userId=req.getParameter("userid");
+			String billId;
+			try {
+				IDBResultSet headSet = new DBPage(new ArrayList<IDBRecord>());
+				IDBRecord headRecord = headSet.appendRow();
+				headRecord.set("USERID", userId);
+				headRecord.set("CREATEDATE", new Date(System.currentTimeMillis()));
+				IDBBill bill = new DBBill(null, dao.getSetMealBill());
+				bill.setResultSet(0, headSet);
+				dao.addOrderForm(bill);
+				billId=(String) bill.getBillID();
+			} catch (Throwable e) {
+				throw new Warning(500,e);
+			}
+			 JSONArray datas = JSONArray.fromObject(content);
+			 String addr=datas.getString(0);
+			 Template pdTemplate = Velocity.getTemplate("tradingscheme.vm", "utf-8");
+			 VelocityContext ctx = new VelocityContext();
+			 ArrayList<HashMap<String, Object>> comboList=new ArrayList<HashMap<String, Object>>();
+			ctx.put("comboList", comboList);
+			float allprice=0;
+			 for(int i=1;i<datas.size();i++){
+				 JSONObject mealData = datas.getJSONObject(i);
+				 HashMap<String, Object> map=new HashMap<String, Object>();
+				 map.put("name", mealData.get("name"));
+				 map.put("price", mealData.get("price"));
+				 allprice+=Float.parseFloat((String) mealData.get("price"));
+				 map.put("week", mealData.get("week"));
+				 map.put("DISPATCHINGDATE", mealData.get("DISPATCHINGDATE"));
+				 map.put("COUNT", mealData.get("COUNT"));
+				 comboList.add(map);
+			 }
+			 req.getSession().setAttribute("currentSumPrice", allprice);
+			 req.getSession().setAttribute("userid", userId);
+			 req.getSession().setAttribute("orderId", billId);
+			 StringWriter sw = new StringWriter();
+			BufferedWriter bw = new BufferedWriter(sw);
+			writer = res.getWriter();
+			pdTemplate.merge(ctx, bw);
+			bw.flush();
+			String backData = sw.toString().replaceAll("\\n", "").replaceAll("\\t", "").replaceAll("\\r", "");
+			writer.write(backData);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}finally{
+			CloseUtil.close(context);
+		}
+	}
 	/**
 	 * 创建订单页面
 	 * @param req
 	 * @param res
 	 * @return
 	 */
+	
 	@RequestMapping(value = "orderForm/create", method = RequestMethod.POST)
 	public ModelAndView createOrderForm(HttpServletRequest req, HttpServletResponse res){
 		IWebContext context = null;
@@ -139,7 +214,7 @@ public class OrderFormController {
 	 * @param res
 	 * @return
 	 */
-	@RequestMapping(value = "orderForm/pay", method = RequestMethod.POST)
+	@RequestMapping(value = "orderForm_pay", method = RequestMethod.POST)
 	public ModelAndView payOrderForm(HttpServletRequest req, HttpServletResponse res){
 		IWebContext context = null;
 		try{
@@ -148,6 +223,8 @@ public class OrderFormController {
 			IDBRecord record = null;
 			try {
 				record = new RequestRecord(req, res, dao.getOrderFormTable());
+				record.set("TOTALPRICE", req.getSession().getAttribute("currentSumPrice"));
+				record.set("orderId", req.getSession().getAttribute("ID"));
 				//TODO 是否支付完成
 				record.set("STATUS", OrderStatus.PAID.toString());//将订单状态设置成支付状态
 				record = dao.updateOrderForm(record);
