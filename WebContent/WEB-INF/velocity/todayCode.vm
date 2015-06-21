@@ -59,11 +59,11 @@
 		<h1 class="header-title ng-binding">今日领取码</h1>
 	</header>
 	<div class="center_content">
-		<h2 class="order_date">$!orderForm.DISPATCHINGDATE</h2>
+		<h2 class="order_date">$DISPATCHINGDATE</h2>
 		<h1 class="tip_2code">今日取餐码，请给您的配送小哥扫描</h1>
-		<div class="img_2code" info=$orderId></div>
+		<div class="img_2code" info="orderForm_finish?ID=$ID"></div>
 		<div class="today_combo">
-		今日早餐:<br /><span>$!orderForm.NAME</span>
+		今日早餐:<br /><span>$NAME</span>
 		</div>
 	</div>		
 </div>

@@ -93,13 +93,16 @@ public class OrderFormController {
 		try{
 //			context = WebContextFactory.createDBContext(req, res);
 			OrderFormDao dao = new OrderFormDaoImpl(context);
-			String content=req.getParameter("content");
+			String mealdetail=req.getParameter("mealdetail");
 			String userId=req.getParameter("userid");
+			String productIds=req.getParameter("productids");
 			String billId;
 			try {
 				IDBResultSet headSet = new DBPage(new ArrayList<IDBRecord>());
 				IDBRecord headRecord = headSet.appendRow();
 				headRecord.set("USERID", userId);
+				headRecord.set("PRODUCTIDS", productIds);
+				headRecord.set("NAME", "ORDER"+System.currentTimeMillis());
 				headRecord.set("CREATEDATE", new Date(System.currentTimeMillis()));
 				IDBBill bill = new DBBill(null, dao.getSetMealBill());
 				bill.setResultSet(0, headSet);
@@ -108,27 +111,23 @@ public class OrderFormController {
 			} catch (Throwable e) {
 				throw new Warning(500,e);
 			}
-			 JSONArray datas = JSONArray.fromObject(content);
-			 String addr=datas.getString(0);
+			 JSONArray datas = JSONArray.fromObject(mealdetail);
+//			 String addr=datas.getString(0);
 			 Template pdTemplate = Velocity.getTemplate("tradingscheme.vm", "utf-8");
 			 VelocityContext ctx = new VelocityContext();
-			 ArrayList<HashMap<String, Object>> comboList=new ArrayList<HashMap<String, Object>>();
+			 ArrayList<JSONObject> comboList=new ArrayList<JSONObject>();
 			ctx.put("comboList", comboList);
 			float allprice=0;
 			 for(int i=1;i<datas.size();i++){
 				 JSONObject mealData = datas.getJSONObject(i);
-				 HashMap<String, Object> map=new HashMap<String, Object>();
-				 map.put("name", mealData.get("name"));
-				 map.put("price", mealData.get("price"));
 				 allprice+=Float.parseFloat((String) mealData.get("price"));
-				 map.put("week", mealData.get("week"));
-				 map.put("DISPATCHINGDATE", mealData.get("DISPATCHINGDATE"));
-				 map.put("COUNT", mealData.get("COUNT"));
-				 comboList.add(map);
+				 comboList.add(mealData);
 			 }
 			 req.getSession().setAttribute("currentSumPrice", allprice);
+			 ctx.put("allprice", allprice);
 			 req.getSession().setAttribute("userid", userId);
-			 req.getSession().setAttribute("orderId", billId);
+			 req.getSession().setAttribute("ID", billId);
+			 ctx.put("billId", billId);
 			 StringWriter sw = new StringWriter();
 			BufferedWriter bw = new BufferedWriter(sw);
 			writer = res.getWriter();
@@ -166,6 +165,30 @@ public class OrderFormController {
 			if(record != null)
 				model.putAll(record.getDataMap());
 			return new ModelAndView("orderForm.vm",model);
+		}finally{
+			CloseUtil.close(context);
+		}
+	}
+	
+	@RequestMapping(value = "orderForm_finish", method = RequestMethod.GET)
+	public ModelAndView finishOrderForm(HttpServletRequest req, HttpServletResponse res){
+		IWebContext context = null;
+		try{
+			String id = req.getParameter("ID");
+			context = WebContextFactory.createDBContext(req, res);
+			OrderFormDao dao = new OrderFormDaoImpl(context);
+			IDBRecord record = null;
+			try {
+				record = new RequestRecord(req, res, dao.getOrderFormTable());
+				record.set("ID",id);
+				//TODO 是否支付完成
+				record.set("STATUS", OrderStatus.RECEIPT.toString());//将订单状态设置成收货状态
+				record = dao.updateOrderForm(record);
+			} catch (Throwable e) {
+				throw new Warning(500,e);
+			}
+			ModelMap model = new ModelMap();
+			return new ModelAndView("reserve_success.vm",model);
 		}finally{
 			CloseUtil.close(context);
 		}
@@ -224,7 +247,10 @@ public class OrderFormController {
 			try {
 				record = new RequestRecord(req, res, dao.getOrderFormTable());
 				record.set("TOTALPRICE", req.getSession().getAttribute("currentSumPrice"));
-				record.set("orderId", req.getSession().getAttribute("ID"));
+//				record.set("DISPATCHINGADDRESS", req.getSession().getAttribute("dispatchingaddress"));
+//				record.set("DISPATCHINGDATE", req.getSession().getAttribute("dispatchingdate"));
+//				record.set("DISPATCHINGTYPE", req.getSession().getAttribute("dispatchingtype"));
+				record.set("ID", req.getSession().getAttribute("ID"));
 				//TODO 是否支付完成
 				record.set("STATUS", OrderStatus.PAID.toString());//将订单状态设置成支付状态
 				record = dao.updateOrderForm(record);
@@ -233,8 +259,7 @@ public class OrderFormController {
 			}
 			ModelMap model = new ModelMap();
 			model.put("success", true);
-			model.put("orderForm",record);
-			model.put("orderId", record.get("ID"));
+			model.putAll(record.getDataMap());
 			return new ModelAndView("todayCode.vm",model);
 		}finally{
 			CloseUtil.close(context);

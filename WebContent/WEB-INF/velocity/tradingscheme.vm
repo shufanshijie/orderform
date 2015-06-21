@@ -135,10 +135,9 @@
 				<div class="contact_you">
 					<!--<li class="contact_item"><span class="addon">楼宇</span><div class="item_value"></div></li>-->
 					<form class="PageOff" action="http://localhost:8080/orderform/orderForm_pay" method="post">
-						<input type="hidden" name="name" value="XXXX">
 						<div class="input-group">
 					         <span class="input-group-addon">楼宇　</span>
-					         <input type="text" class="form-control" placeholder="楼宇" name="DISPATCHINGADDRESS>
+					         <input type="text" class="form-control" placeholder="楼宇" name="DISPATCHINGADDRESS">
 					      </div>
 					       <div class="input-group">
 					         <span class="input-group-addon">时间　</span>
@@ -146,12 +145,31 @@
 					      </div>
 						<div class="input-group">
 					         <span class="input-group-addon">手机　</span>
-					         <input type="text" class="form-control" placeholder="手机" name="MOBILE">
+					         <input type="text" class="form-control" placeholder="手机" name="mobile">
 					      </div>
 					       <div class="input-group">
 					         <span class="input-group-addon">收餐人</span>
-					         <input type="text" class="form-control" placeholder="收餐人" name="USERNAME">
+					         <input type="text" class="form-control" placeholder="收餐人" name="username">
 					      </div>
+					      
+					      <input class="mealdetail"  type="hidden" name="mealdetail" value="">
+			
+						<input class="id"  type="hidden" name="id" value="$billId">
+						<input class="image"  type="hidden" name="image" value="">
+						<input class="name"  type="hidden" name="name" value="">
+						<input class="status"  type="hidden" name="status" value="">
+						<input class="dispatchingtype"  type="hidden" name="dispatchingtype" value="">						
+						<input class="productids"  type="hidden" name="productids"  value="">
+						<input class="totalprice"  type="hidden" name="totalprice"  value="">
+						<input class="consumepoints"  type="hidden" name="consumepoints"  value="">
+						<input class="pointstype"  type="hidden" name="pointstype"  value="">
+						<input class="userid"  type="hidden" name="userid"  value="">
+						<input class="payno"  type="hidden" name="payno"  value="">
+						<input class="createdate"  type="hidden" name="createdate"  value="">
+						<input class="paydate"  type="hidden" name="paydate"  value="">
+						<input class="dealdate"  type="hidden" name="dealdate"  value="">
+						<input class="wfbillid"  type="hidden" name="wfbillid"  value="">
+						<input class="hyversion"  type="hidden" name="hyversion"  value="">
 					</form>
 				     
 				     
@@ -168,7 +186,7 @@
 				</form>
 				
 			     <div class="summarizing">
-			     	<span class="gongji">共计：30元</span>
+			     	<span class="gongji">共计：$allprice元</span>
 			     	<span class="zhanghaoyue">帐号余额：180元</span>
 			     </div>
 			</div>
@@ -192,8 +210,10 @@
 				if($(event.target).hasClass('take_food_item')){
 					var choised=$(event.target).html();
 					if($(event.target).hasClass('take_point')){
+						$('input.dispatchingtype').val('0');
 						$('.contact_you').hide();
 					}else if($(event.target).hasClass('take_tower')){
+						$('input.dispatchingtype').val('1');
 						$('.contact_you').show();
 					}
 					$('.tower_place').html(choised);
