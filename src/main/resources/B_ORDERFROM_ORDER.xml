@@ -17,10 +17,19 @@
 		<billField name="DISPATCHINGADDRESS" dbName="DISPATCHINGADDRESS"  description="订单配送地址" tableIndex="0" >
 			<listColumn noquery="true"/>
 		</billField>
-		<billField name="DISPATCHINGDATE" dbName="DISPATCHINGDATE"  description="订单配送时间" tableIndex="0" >
+		<billField name="DISPATCHINGDATE" dbName="DISPATCHINGDATE"  description="订单配送日期" tableIndex="0" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="DISPATCHINGTIME" dbName="DISPATCHINGTIME"  description="订单配送时间" tableIndex="0" >
 			<listColumn noquery="true"/>
 		</billField>
 		<billField name="DISPATCHINGTYPE" dbName="DISPATCHINGTYPE"  description="订单配送方式" tableIndex="0" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="MOBILE" dbName="MOBILE"  description="收货人电话" tableIndex="0" >
+			<listColumn noquery="true"/>
+		</billField>
+		<billField name="USERNAME" dbName="USERNAME"  description="收货人姓名" tableIndex="0" >
 			<listColumn noquery="true"/>
 		</billField>
 		<billField name="TOTALPRICE" dbName="TOTALPRICE"  description="订单总价" tableIndex="0" >
@@ -57,19 +66,10 @@
 		<billField name="COUNT" dbName="COUNT"  description="订购数量" tableIndex="1" >
 			<listColumn noquery="true"/>
 		</billField>
-		<billField name="DISPATCHINGADDRESS" dbName="DISPATCHINGADDRESS"  description="配送地址" tableIndex="1" >
-			<listColumn noquery="true"/>
-		</billField>
-		<billField name="DISPATCHINGDATE" dbName="DISPATCHINGDATE"  description="送货时间" tableIndex="1" >
-			<listColumn noquery="true"/>
-		</billField>
-		<billField name="DISPATCHINGTYPE" dbName="DISPATCHINGTYPE"  description="送货方式" tableIndex="1" >
-			<listColumn noquery="true"/>
-		</billField>
 		<billField name="PRICE" dbName="PRICE"  description="套餐价格" tableIndex="1" >
 			<listColumn noquery="true"/>
 		</billField>
-		<billField name="REALPRICE" dbName="REALPRICE"  description="套餐成交价格" tableIndex="1" >
+		<billField name="TOTALPRICE" dbName="TOTALPRICE"  description="套餐总价格" tableIndex="1" >
 			<listColumn noquery="true"/>
 		</billField>
 		<pluginInterceptor className="haiyan.interceptor.ConfigInterceptor" methodName="exp" pluginName="initBill" type="before"/>

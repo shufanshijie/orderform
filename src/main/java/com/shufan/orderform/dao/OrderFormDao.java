@@ -14,8 +14,8 @@ import haiyan.config.castorgen.Table;
  */
 public interface OrderFormDao {
 	
-	public abstract IDBResultSet getOrderList(String userId,int maxPageSize,int page);
-	public abstract IDBRecord getOrderForm(String orderId);
+	public abstract IDBResultSet getOrderList(String userId,int year,int month);
+	public abstract IDBRecord getOrderForm(String userId,String orderId);
 	public abstract IDBRecord createOrderForm(IDBRecord orderForm);
 	public abstract IDBRecord updateOrderForm(IDBRecord orderForm,IDBFilter filter);//很不雅
 	public abstract boolean deleteOrderForm(String[] orderFormId);

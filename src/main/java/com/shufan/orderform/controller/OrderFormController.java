@@ -20,6 +20,8 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,18 +53,23 @@ public class OrderFormController {
 	 * @param res
 	 * @return
 	 */
-	@RequestMapping(value = "orderForms/{userID}", method = RequestMethod.GET)
+	@RequestMapping(value = "orderForms/{userID}/{year}/{month}", method = RequestMethod.GET)
 	public ModelAndView orderFormList(HttpServletRequest req, HttpServletResponse res
-			,@PathVariable("userID")String userId){
+			,@PathVariable("userID")String userId,@PathVariable("year")int year,@PathVariable("month")int month){
 		IWebContext context = null;
 		try{
 			context= WebContextFactory.createDBContext(req, res);
-			String sPageSize = req.getParameter("maxPageSize");
-			int maxPageSize = sPageSize == null ? 20 : Integer.parseInt(sPageSize);
 			OrderFormDao dao = new OrderFormDaoImpl(context);
-			IDBResultSet list = dao.getOrderList(userId, maxPageSize, 1);
+			IDBResultSet list = dao.getOrderList(userId, year, month);
+			Collection<IDBRecord> collection = list.getRecords();
+			JSONObject datas = new JSONObject();
+			for(IDBRecord record : collection){
+				String dispatchingDate = record.getString("DISPATCHINGDATE");
+				datas.put(dispatchingDate.split("-")[2],record.getString("ID"));
+			}
 			ModelMap model = new ModelMap();
-			model.put("list", list.getRecords());
+			model.put("data", datas);
+			model.put("userId", userId);
 			return new ModelAndView("order_manager.vm",model);
 		}finally{
 			CloseUtil.close(context);
@@ -74,18 +81,29 @@ public class OrderFormController {
 	 * @param res
 	 * @return
 	 */
-	@RequestMapping(value = "orderForm/{orderFormId}", method = RequestMethod.GET)
+	@RequestMapping(value = "orderForm/{userID}/{orderFormId}", method = RequestMethod.GET)
 	public ModelAndView orderForm(HttpServletRequest req, HttpServletResponse res
-			,@PathVariable("orderFormId")String orderFormId){
+			,@PathVariable("userID")String userId,@PathVariable("orderFormId")String orderFormId){
 		IWebContext context = null;
 		try{
 			context = WebContextFactory.createDBContext(req, res);
 			OrderFormDao dao = new OrderFormDaoImpl(context);
-			IDBRecord record = dao.getOrderForm(orderFormId);
+			IDBBill bill = new DBBill(context.getUser(), dao.getSetMealBill());
+			bill.setBillID(orderFormId);
+			bill = dao.selectOrderForm(bill);
+			IDBResultSet head = bill.getResultSet(0);
 			ModelMap model = new ModelMap();
-			if(record != null)
-				model.putAll(record.getDataMap());
+			if(head.getRecordCount()>0){
+				IDBRecord headRecord = head.getRecord(0);
+				if(!userId.equals(headRecord.getString("USERID"))){
+					return new ModelAndView("404.html");
+				}
+				model.put("head", headRecord.getDataMap());
+				model.put("detail", bill.getResultSet(1).getRecords());
+			}
 			return new ModelAndView("orderForm.vm",model);
+		} catch (Throwable e) {
+			throw new Warning(500,e);
 		}finally{
 			CloseUtil.close(context);
 		}
@@ -114,8 +132,8 @@ public class OrderFormController {
 				if(mealData == null || mealData.isNullObject())
 					continue;
 				BigDecimal price = new BigDecimal(mealData.getString("price"));
-				price = price.multiply(new BigDecimal(mealData.getInt("COUNT")));
-				allprice = price.add(allprice);
+				BigDecimal totalPrice = price.multiply(new BigDecimal(mealData.getInt("COUNT")));
+				allprice = totalPrice.add(allprice);
 				mealData.accumulate("price", price);
 				comboList.add(mealData);
 				String sDate = mealData.getString("DISPATCHINGDATE");
@@ -129,9 +147,17 @@ public class OrderFormController {
 				headRecord.set("CREATEDATE", createDate);
 				headRecord.set("DISPATCHINGDATE", date);
 				headRecord.set("LOTNO", lotOrderID);
-				headRecord.set("TOTALPRICE", price);
+				headRecord.set("TOTALPRICE", totalPrice);
 				IDBBill bill = new DBBill(null, dao.getSetMealBill());
 				bill.setResultSet(0, headSet);
+				IDBResultSet detailSet = new DBPage(new ArrayList<IDBRecord>());
+				IDBRecord detailRecord = detailSet.appendRow();
+				//detailRecord.set("IMAGE", "");
+				detailRecord.set("NAME", mealData.getString("name"));
+				detailRecord.set("COUNT", mealData.getInt("COUNT"));
+				detailRecord.set("PRICE", price);
+				detailRecord.set("TOTALPRICE", totalPrice);
+				bill.setResultSet(1, detailSet);
 				dao.addOrderForm(bill);
 				mealData.accumulate("billID", bill.getBillID());
 			}
@@ -262,6 +288,9 @@ public class OrderFormController {
 				record.set("TOTALPRICE", req.getSession().getAttribute("currentSumPrice"));
 				record.set("DISPATCHINGADDRESS", req.getParameter("DISPATCHINGADDRESS"));
 				record.set("DISPATCHINGTIME", req.getParameter("DISPATCHINGTIME"));
+				record.set("MOBILE", req.getParameter("mobile"));
+				record.set("USERNAME", req.getParameter("username"));
+				
 //				record.set("DISPATCHINGTYPE", req.getParameter("dispatchingtype"));
 				//TODO 是否支付完成
 				record.set("STATUS", OrderStatus.PAID.toString());//将订单状态设置成支付状态
@@ -274,6 +303,8 @@ public class OrderFormController {
 			ModelMap model = new ModelMap();
 //			model.put("success", true);
 			model.put("userID", userID);
+			model.put("year", Calendar.getInstance().get(Calendar.YEAR));
+			model.put("month", Calendar.getInstance().get(Calendar.MONTH)+1);
 //			model.putAll(record.getDataMap());
 //			return new ModelAndView("todayCode.vm",model);
 			return new ModelAndView("reserve_success.vm",model);
@@ -296,8 +327,8 @@ public class OrderFormController {
 			OrderFormDao dao = new OrderFormDaoImpl(context);
 //			String queryString = req.getQueryString();
 //			String orderId = queryString.substring(queryString.indexOf("=")+1);
-			IDBRecord orderForm = dao.getOrderForm(orderId);
-			if(orderForm==null || !userId.equals(orderForm.getString("USERID"))){
+			IDBRecord orderForm = dao.getOrderForm(userId,orderId);
+			if(orderForm==null ){
 				res.setStatus(400);
 				return new ModelAndView("404.html");
 			}

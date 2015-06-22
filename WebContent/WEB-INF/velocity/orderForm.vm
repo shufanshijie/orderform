@@ -57,20 +57,21 @@
 		<h1 class="header-title ng-binding">订单查看</h1>
 	</header>
 	<div class="center_content">
-		<h2 class="order_date">$head.CREATEDATE</h2>
+		<h2 class="order_date">$head.DISPATCHINGDATE</h2>
 		<img class="order_img" src="$head.IMAGE">
 		<div class="advertorial">
 			#foreach($meal in $detail)
 			<div class="order_detail">
-				<img alt="" src="$meal.IMAGE">
 				<span>$meal.NAME</span>
-				<span>$meal.DISPATCHINGDATE</span>
-				<span>$meal.TOTALPRICE</span>
+				<span> x $meal.COUNT 份 </span>
+				<span>$meal.TOTALPRICE 元</span>
 			</div>
 			#end
 		</div>
 		<div class="shipping_address">
-			$head.DISPATCHINGADDRESS
+			<span>地址： $head.DISPATCHINGADDRESS</span><br>
+			<span>电话： $head.MOBILE</span><br>
+			<span>姓名： $head.USERNAME</span><br>
 		</div>		
 	</div>		
 	<footer class="eleme-footer-virtual">

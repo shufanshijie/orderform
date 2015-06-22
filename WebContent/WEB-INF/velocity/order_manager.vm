@@ -46,10 +46,10 @@
 <meta name="apple-mobile-web-app-title" content="餐餐">
 
 
-<link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet"
+<link href="../../../bootstrap/css/bootstrap.min.css" rel="stylesheet"
 	type="text/css">
-<link rel="stylesheet" href="../css/kenel.css">
-<link rel="stylesheet" href="../css/smart.css">
+<link rel="stylesheet" href="../../../css/kenel.css">
+<link rel="stylesheet" href="../../../css/smart.css">
 </head>
 
 <body class="ng-scope">
@@ -68,27 +68,41 @@
 				
 			</div>
 			<footer class="eleme-footer-virtual">
-				<a class="btn btn-primary btn-footer">今日取餐码</a>
+				<a class="btn btn-primary btn-footer" onclick="openToday()">今日取餐码</a>
 			</footer>
 		</div>
 	</div>
-	<script type="text/javascript" src="../js/jquery-2.1.4.js"></script>
-	<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="../js/meat.js"></script>
+	<script type="text/javascript" src="../../../js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="../../../bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../../js/meat.js"></script>
 	<script type="text/javascript">
 		$(document).click(function(event){
 			if($(event.target).parents('.day').length>0){
-				if($(event.target).parents('.day').find('.status').html()=="完"){
-					window.location.href='share_evaluate.html';
-				}else if($(event.target).parents('.day').find('.status').html()=="定"){
-					window.location.href='show_order.html';
+				var $ele = $(event.target).parents('.day').find('.status');
+				var meal = $ele.attr('meal');
+				if($ele.html()=="完"){
+					//window.location.href='../share_evaluate.html';
+					window.location.href='../../../orderForm/$userId/'+meal;
+				}else if($ele.html()=="定"){
+					//window.location.href='../show_order.html';
+					window.location.href='../../../orderForm/$userId/'+meal;
 				}
 			}
 		});
-	
+		
+		function openToday(){
+			window.location.href='../../../showTodayCode/$userId/'+ $('footer').attr('meal');
+		}
+		
+		var data = $data;
 		var showWeekend=false;//是否显示周末
 		var first;//第一天是星期几
 		var today=new Date();
+		if(!data[today.getDate()]){
+			$('footer').attr('display','none');
+		}else{
+			$('footer').attr('meal',data[today.getDate()]);
+		}
 		function handleCalender(year,month,day){
 			var today=new Date();
 			var week=today.getDay();
@@ -122,16 +136,30 @@
 		function printOneMouth(daynum,temple,day){
 			for(var i=0;i<daynum;i++){
 				var obj=$(temple);
-				obj.find('.dd').html(i+1);
+				var index = i+1;
+				obj.find('.dd').html(index);
+				var item = obj.find('.status');
 				if((first+i)%7==0||(first+i)%7==6){
-					obj.find('.status').html('无');
-				}else if(i+1<day){
-					obj.find('.status').html('完');
-				}else if(i+1==day){
-					obj.find('.status').html('今');
+					item.html('无');
+				}else if(index<day){
+					if(data[index]){
+						item.html('完');
+						item.attr('meal',data[index]);
+					}
+					else
+						item.html('无');
+				}else if(index==day){
+					item.html('今');
+					if(data[index]){
+						item.attr('meal',data[index]);
+					}
 				}else{
-					obj.find('.status').html('定');
-				}showWeekend
+					if(data[index]){
+						item.html('定');
+						item.attr('meal',data[index]);
+					}else
+						item.html('无');
+				}
 				if((first+i)%7==0||(first+i)%7==6){
 					if(showWeekend)
 						$('.calender_wrapper').append(obj[0].outerHTML);

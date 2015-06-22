@@ -14,9 +14,12 @@ import haiyan.common.intf.session.IContext;
 import haiyan.config.castorgen.Table;
 import haiyan.config.util.ConfigUtil;
 import haiyan.orm.database.TableDBContextFactory;
+import haiyan.orm.database.sql.SQLDBFilter;
 import haiyan.orm.intf.database.ITableDBManager;
 import haiyan.orm.intf.session.ITableDBContext;
 
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.Collection;
 
 import com.shufan.orderform.dao.OrderFormDao;
@@ -61,15 +64,21 @@ public class OrderFormDaoImpl implements OrderFormDao {
 	}
 
 	@Override
-	public IDBResultSet getOrderList(String userId, int maxPageSize, int page) {
+	public IDBResultSet getOrderList(String userId, int year, int month) {
 		ITableDBContext context = null;
 		ITableDBManager dbm = null;
 		try {
 			context = TableDBContextFactory.createDBContext(parentContext);
 			dbm = context.getDBM();
-			IDBRecord record = dbm.createRecord();
-			record.set("USERID", userId);
-			IDBResultSet result = dbm.select(context, getOrderFormTable(), record, maxPageSize, page);
+			Calendar cal = Calendar.getInstance();
+			cal.set(year, month-1, 1,0,0,0);
+			java.util.Date uStart = cal.getTime();
+			Date start = new Date(uStart.getTime());
+			cal.set(year, month, 1,0,0,0);
+			java.util.Date uEnd = cal.getTime();
+			Date end = new Date(uEnd.getTime());;
+			IDBFilter filter = new SQLDBFilter(" and USERID = ? and DISPATCHINGDATE > ? and DISPATCHINGDATE < ? ", new Object[]{userId,start,end});
+			IDBResultSet result = dbm.select(context, getOrderFormTable(), filter, 31, 1);
 			return result;
 		} catch (Throwable e) {
 			throw Warning.wrapException(e);
@@ -80,14 +89,18 @@ public class OrderFormDaoImpl implements OrderFormDao {
 	}
 
 	@Override
-	public IDBRecord getOrderForm(String orderId) {
+	public IDBRecord getOrderForm(String userId,String orderId) {
 		ITableDBContext context = null;
 		ITableDBManager dbm = null;
 		try {
 			context = TableDBContextFactory.createDBContext(parentContext);
 			dbm = context.getDBM();
-			IDBRecord record = dbm.select(context, getOrderFormTable(), orderId);
-			return record;
+			IDBFilter filter = new SQLDBFilter(" and ID = ? and USERID = ?", new Object[]{orderId,userId});
+			IDBResultSet result = dbm.select(context, getOrderFormTable(), filter,1,1);
+			if(result.getRecordCount()>0)
+				return result.getRecord(0);
+			else
+				return null;
 		} catch (Throwable e) {
 			throw Warning.wrapException(e);
 		}finally{

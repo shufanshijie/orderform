@@ -21,19 +21,6 @@
 			<component type="integer"/>
 			<queryCondition type="equal"/>
 		</field>
-		<field name="DISPATCHINGADDRESS" uiname="DISPATCHINGADDRESS" description="订单配送地址" javaType="string">
-			<component type="text"/>
-		</field>
-		<field name="DISPATCHINGDATE" uiname="DISPATCHINGDATE" description="送货时间" javaType="date" nullAllowed="true" dataStyle="yyyy-MM-dd">
-			<component type="date" colspan="3" readOnly="true"/>
-			<queryCondition type="region"/>
-		</field>
-		<field name="DISPATCHINGTYPE" uiname="DISPATCHINGTYPE" description="配送方式" javaType="string" nullAllowed="false" defaultValue="0">
-			<option displayName="自提" value="0"/>
-			<option displayName="送货上门" value="1"/>
-			<component type="dropdown" />
-			<queryCondition type="equal"/>
-		</field>
 		<field name="PRICE" uiname="PRICE" description="套餐单价" javaType="bigDecimal" >
 			<component type="bigDecimal"/>
 			<queryCondition type="equal"/>
@@ -42,10 +29,5 @@
 			<component type="bigDecimal"/>
 			<queryCondition type="equal"/>
 		</field>
-		<queryFilter>
-			<pluggedFilter><![CDATA[
-				order by t_1.DISPATCHINGDATE
-			]]></pluggedFilter>
-		</queryFilter>
 	</table>
 </Haiyan>

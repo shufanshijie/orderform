@@ -29,16 +29,24 @@
 			<component type="dropdown" />
 			<queryCondition type="equal"/>
 		</field>
-		<field name="DISPATCHINGADDRESS" uiname="DISPATCHINGADDRESS" description="订单配送时间" javaType="string" nullAllowed="false" defaultValue="8:00~9:00">
+		<field name="DISPATCHINGADDRESS" uiname="DISPATCHINGADDRESS" description="订单配送地址" javaType="string" >
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="MOBILE" uiname="MOBILE" description="收货人电话" javaType="string" >
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="USERNAME" uiname="USERNAME" description="收货人姓名" javaType="string" >
+			<component type="text"/>
+			<queryCondition type="equal"/>
+		</field>
+		<field name="DISPATCHINGTIME" uiname="DISPATCHINGTIME" description="送货时间" javaType="string" nullAllowed="false" defaultValue="8:00~9:00">
 			<option displayName="8:00~9:00" value="8:00~9:00"/>
 			<option displayName="7:00~8:00" value="7:00~8:00"/>
 			<option displayName="9:00~10:00" value="9:00~10:00"/>
 			<component type="dropdown" />
 			<queryCondition type="equal"/>
-		</field>
-		<field name="DISPATCHINGTIME" uiname="DISPATCHINGTIME" description="送货时间" javaType="string" nullAllowed="true" >
-			<component type="date" colspan="3" readOnly="true"/>
-			<queryCondition type="region"/>
 		</field>
 		<field name="DISPATCHINGDATE" uiname="DISPATCHINGDATE" description="订单配送日期" javaType="date" nullAllowed="true" dataStyle="yyyy-MM-dd">
 			<component type="date" colspan="3" readOnly="true"/>
