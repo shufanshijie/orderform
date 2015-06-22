@@ -7,6 +7,7 @@ import haiyan.common.CloseUtil;
 import haiyan.common.exception.Warning;
 import haiyan.common.intf.config.IBillConfig;
 import haiyan.common.intf.database.IDBBill;
+import haiyan.common.intf.database.IDBFilter;
 import haiyan.common.intf.database.orm.IDBRecord;
 import haiyan.common.intf.database.orm.IDBResultSet;
 import haiyan.common.intf.session.IContext;
@@ -113,13 +114,13 @@ public class OrderFormDaoImpl implements OrderFormDao {
 	}
 
 	@Override
-	public IDBRecord updateOrderForm(IDBRecord orderForm) {
+	public IDBRecord updateOrderForm(IDBRecord orderForm,IDBFilter filter) {
 		ITableDBContext context = null;
 		ITableDBManager dbm = null;
 		try {
 			context = TableDBContextFactory.createDBContext(parentContext);
 			dbm = context.getDBM();
-			IDBRecord record = dbm.update(context, getOrderFormTable(), orderForm);
+			IDBRecord record = dbm.update(context, getOrderFormTable(), orderForm,filter);
 			return record;
 		} catch (Throwable e) {
 			throw Warning.wrapException(e);

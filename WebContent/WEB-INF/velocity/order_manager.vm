@@ -1,0 +1,146 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+@charset "UTF-8";
+.calender_wrapper{
+	margin-top:20px;	
+ 	margin-left: 10%; 
+ 	margin-right: 10%; 
+ 	width: 80%; 
+}
+.calender_wrapper div{
+	float: left;
+	width: 20%;
+	height:40px;
+	border-color:#0000FF;
+	border: 1px solid ;
+}
+.calender_wrapper span{
+	display:block;
+	width: 100%;
+	text-align: center;
+}
+.calender_wrapper .status{
+	color: red;
+}
+</style>
+<meta charset="utf-8">
+<meta http-equiv="cleartype" content="on">
+<meta name="description">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+<meta name="format-detection" content="telephone=no, email=no">
+<meta name="apple-itunes-app" content="app-id=507161324">
+<title></title>
+<meta name="msapplication-TileImage"
+	content="//static11.elemecdn.com/touch-icon-310x310-precomposed.png">
+<meta name="msapplication-TileColor" content="#3199e8">
+
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style"
+	content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="餐餐">
+
+
+<link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet"
+	type="text/css">
+<link rel="stylesheet" href="../css/kenel.css">
+<link rel="stylesheet" href="../css/smart.css">
+</head>
+
+<body class="ng-scope">
+	<div class="ng-scope">
+		<header class="eleme-header ng-scope">
+			<a class="header-menu page_back" role="button">
+				返回
+			</a>
+			<h1 class="header-title ng-binding">订单管理</h1>
+		</header>
+		<div class="grst-filter-toggle meat_type" >
+					<span class="ng-binding">6月</span>
+		</div>
+		<div class="center_content">
+			<div class="calender_wrapper">
+				
+			</div>
+			<footer class="eleme-footer-virtual">
+				<a class="btn btn-primary btn-footer">今日取餐码</a>
+			</footer>
+		</div>
+	</div>
+	<script type="text/javascript" src="../js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../js/meat.js"></script>
+	<script type="text/javascript">
+		$(document).click(function(event){
+			if($(event.target).parents('.day').length>0){
+				if($(event.target).parents('.day').find('.status').html()=="完"){
+					window.location.href='share_evaluate.html';
+				}else if($(event.target).parents('.day').find('.status').html()=="定"){
+					window.location.href='show_order.html';
+				}
+			}
+		});
+	
+		var showWeekend=false;//是否显示周末
+		var first;//第一天是星期几
+		var today=new Date();
+		function handleCalender(year,month,day){
+			var today=new Date();
+			var week=today.getDay();
+			first=week-(today.getDate()%7-1);
+			if(first<=0)
+				first+=7;
+			$('.calender_wrapper').html('');
+			var templeSpace='<div class="day">\
+				</div>';
+			for(var k=1;k<first;k++){
+				$('.calender_wrapper').append(templeSpace);
+			}
+			var temple='<div class="day">\
+					<span class="status">完</span>\
+					<span class="dd">1</span>\
+				</div>';
+			var bigMonth=[1,3,5,7,8,10,12];
+			var smallMonth=[4,6,9,11];
+			var specialMonth=[2];
+			if(bigMonth.indexOf(month)>=0){
+				printOneMouth(31,temple,day);
+			}
+			if(smallMonth.indexOf(month)>=0){
+				printOneMouth(30,temple,day);
+			}
+			if(specialMonth.indexOf(month)>=0){
+				var daynum=year%100==0?(year%400==0?28:29):(year%4==0?28:29);
+				printOneMouth(daynum,temple,day);
+			}
+		}		
+		function printOneMouth(daynum,temple,day){
+			for(var i=0;i<daynum;i++){
+				var obj=$(temple);
+				obj.find('.dd').html(i+1);
+				if((first+i)%7==0||(first+i)%7==6){
+					obj.find('.status').html('无');
+				}else if(i+1<day){
+					obj.find('.status').html('完');
+				}else if(i+1==day){
+					obj.find('.status').html('今');
+				}else{
+					obj.find('.status').html('定');
+				}showWeekend
+				if((first+i)%7==0||(first+i)%7==6){
+					if(showWeekend)
+						$('.calender_wrapper').append(obj[0].outerHTML);
+				}else{
+					$('.calender_wrapper').append(obj[0].outerHTML);
+				}					
+			}
+		}
+		handleCalender(1900+today.getYear(),today.getMonth()+1,today.getDate());
+	</script>
+</body>
+</html>

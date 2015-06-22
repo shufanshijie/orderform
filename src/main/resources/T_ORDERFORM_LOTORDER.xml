@@ -1,22 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Haiyan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../haiyan.xsd">
-	<table name="T_ORDERFORM_ORDER" description="订单信息">
-		<id name="ID" javaType="string" uiname="ID" description="订单编号">
+	<table name="T_ORDERFORM_ORDER" description="批量订单信息">
+		<id name="ID" javaType="string" uiname="ID" description="批量订单编号">
 			<component type="hidden" url="#"/>
 			<queryCondition type="equal"/>
 		</id>
-		<field name="LOTNO" uiname="LOTNO" description="订单批号" javaType="string">
-			<component type="text"/>
-			<queryCondition type="equal"/>
-		</field>
-		<field name="IMAGE" uiname="IMAGE" description="订单列表图片" javaType="string" nullAllowed="false" length="256" defaultValue="http://images.5proapp.com/noportrait">
-			<component type="text"/>
-			<queryCondition type="equal"/>
-		</field>
-		<field name="NAME" uiname="NAME" description="订单列表名称" javaType="string" >
-			<component type="text"/>
-			<queryCondition type="equal"/>
-		</field>
 		<field name="STATUS" uiname="STATUS" description="订单状态" javaType="string" nullAllowed="false" defaultValue="INIITIAL">
 			<option displayName="初始状态" value="INIITIAL"/>
 			<option displayName="未支付状态" value="UNPAID"/>
@@ -29,18 +17,10 @@
 			<component type="dropdown" />
 			<queryCondition type="equal"/>
 		</field>
-		<field name="DISPATCHINGADDRESS" uiname="DISPATCHINGADDRESS" description="订单配送时间" javaType="string" nullAllowed="false" defaultValue="8:00~9:00">
-			<option displayName="8:00~9:00" value="8:00~9:00"/>
-			<option displayName="7:00~8:00" value="7:00~8:00"/>
-			<option displayName="9:00~10:00" value="9:00~10:00"/>
-			<component type="dropdown" />
-			<queryCondition type="equal"/>
+		<field name="DISPATCHINGADDRESS" uiname="DISPATCHINGADDRESS" description="订单配送地址" javaType="string">
+			<component type="text"/>
 		</field>
-		<field name="DISPATCHINGTIME" uiname="DISPATCHINGTIME" description="送货时间" javaType="string" nullAllowed="true" >
-			<component type="date" colspan="3" readOnly="true"/>
-			<queryCondition type="region"/>
-		</field>
-		<field name="DISPATCHINGDATE" uiname="DISPATCHINGDATE" description="订单配送日期" javaType="date" nullAllowed="true" dataStyle="yyyy-MM-dd">
+		<field name="DISPATCHINGDATE" uiname="DISPATCHINGDATE" description="送货时间" javaType="date" nullAllowed="true" dataStyle="yyyy-MM-dd">
 			<component type="date" colspan="3" readOnly="true"/>
 			<queryCondition type="region"/>
 		</field>
@@ -83,13 +63,9 @@
 			<component type="date" colspan="3" readOnly="true"/>
 			<queryCondition type="region"/>
 		</field>
-		<field name="DEALDATE" uiname="DEALDATE" description="交易时间" javaType="date" nullAllowed="true" dataStyle="yyyy-MM-dd">
-			<component type="date" colspan="3" readOnly="true"/>
-			<queryCondition type="region"/>
-		</field>
 		<queryFilter>
 			<pluggedFilter><![CDATA[
-				order by t_1.DISPATCHINGTIME desc
+				order by t_1.CREATEDATE desc
 			]]></pluggedFilter>
 		</queryFilter>
 	</table>

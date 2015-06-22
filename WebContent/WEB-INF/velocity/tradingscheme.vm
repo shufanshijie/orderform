@@ -141,7 +141,14 @@
 					      </div>
 					       <div class="input-group">
 					         <span class="input-group-addon">时间　</span>
+					         <select class="form-control" name="DISPATCHINGTIME">
+					         	<option>8:00~9:00</option>
+					         	<option>7:00~8:00</option>
+					         	<option>9:00~10:00</option>
+					         </select>
+					         <!-- 
 					         <input type="text" class="form-control" placeholder="时间"  name="DISPATCHINGDATE">
+					     		 -->
 					      </div>
 						<div class="input-group">
 					         <span class="input-group-addon">手机　</span>
@@ -154,16 +161,16 @@
 					      
 					      <input class="mealdetail"  type="hidden" name="mealdetail" value="">
 			
-						<input class="id"  type="hidden" name="id" value="$billId">
+						<input class="id"  type="hidden" name="id" value="$lotNo">
 						<input class="image"  type="hidden" name="image" value="">
 						<input class="name"  type="hidden" name="name" value="">
 						<input class="status"  type="hidden" name="status" value="">
-						<input class="dispatchingtype"  type="hidden" name="dispatchingtype" value="">						
+						<input class="dispatchingtype"  type="hidden" name="dispatchingtype" value="">
 						<input class="productids"  type="hidden" name="productids"  value="">
 						<input class="totalprice"  type="hidden" name="totalprice"  value="">
 						<input class="consumepoints"  type="hidden" name="consumepoints"  value="">
 						<input class="pointstype"  type="hidden" name="pointstype"  value="">
-						<input class="userid"  type="hidden" name="userid"  value="">
+						<input class="userid"  type="hidden" name="userid"  value="$userid">
 						<input class="payno"  type="hidden" name="payno"  value="">
 						<input class="createdate"  type="hidden" name="createdate"  value="">
 						<input class="paydate"  type="hidden" name="paydate"  value="">
@@ -187,7 +194,9 @@
 				
 			     <div class="summarizing">
 			     	<span class="gongji">共计：$allprice元</span>
+			     	<!--  
 			     	<span class="zhanghaoyue">帐号余额：180元</span>
+			     	-->
 			     </div>
 			</div>
 		</div>
@@ -240,6 +249,17 @@
 								}
 							});
 		});
+		$.getJSON('http://localhost:8080/usercenter/addr/wx/123?jsonCallBack=?', function(data) {
+            if (data.addr) {
+                $('#building').val(data.addr.DISPATCHINGADDRESS);
+                $('#dispatching-date').val(data.addr.DISPATCHINGDATE);
+                $('#mobile').val(data.addr.MOBILE);
+                $('#username').val(data.addr.USERNAME);
+            }
+        });
+        function saveAddress(param){
+        	alert('saveAddress');
+        }
 	</script>
 </body>
 </html>
