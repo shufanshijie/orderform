@@ -61,14 +61,14 @@
 			<h1 class="header-title ng-binding">订单管理</h1>
 		</header>
 		<div class="grst-filter-toggle meat_type" >
-					<span class="ng-binding">6月</span>
+					<span class="ng-binding">$month月</span>
 		</div>
 		<div class="center_content">
 			<div class="calender_wrapper">
 				
 			</div>
 			<footer class="eleme-footer-virtual">
-				<a class="btn btn-primary btn-footer" onclick="openToday()">今日取餐码</a>
+				<a class="btn btn-primary btn-footer" onclick="openToday()" >今日取餐码</a>
 			</footer>
 		</div>
 	</div>
@@ -91,7 +91,7 @@
 		});
 		
 		function openToday(){
-			window.location.href='http://test.5proapp.com:8888/orderform/showTodayCode/$userId/'+ $('footer').attr('meal');
+			window.location.href='../../../showTodayCode/$userId/'+ $('footer').attr('meal');
 		}
 		
 		var data = $data;
@@ -99,7 +99,9 @@
 		var first;//第一天是星期几
 		var today=new Date();
 		if(!data[today.getDate()]){
-			$('footer').attr('display','none');
+			$('footer a').html("去定餐");
+			$('footer a').attr("href","/product/mealHome");
+			$('footer a')[0].onclick=null;
 		}else{
 			$('footer').attr('meal',data[today.getDate()]);
 		}
