@@ -61,6 +61,7 @@
 	display:none;
 	position: absolute;
 	border-radius:0 0 10px 10px;
+	z-index:100;
 	width:100%;
 	background-color: rgb(255,255,255);
 	text-align: center;
@@ -110,7 +111,7 @@
 	<div class="ng-scope transport_blok">
 		<header class="eleme-header ng-scope">
 			<a class="header-menu page_back" role="button"> 返回 </a>
-			<h1 class="header-title ng-binding">民生银行西门自提餐点</h1>
+			<h1 class="header-title ng-binding">完善订单</h1>
 		</header>
 		<script type="text/javascript">
 			
