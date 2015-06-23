@@ -18,6 +18,13 @@ function clearHeader(){
 	$(document).find('.eleme-header').find('.header-helper').remove();
 }
 
+$(document).click(function(event){
+	if($(event.target).hasClass('page_back')){
+		if(window.location.pathname!='/product/mealHome')
+			window.history.go(-1);
+	}
+});
+
 function setCookie(name,value)
 {
     var Days = 1;

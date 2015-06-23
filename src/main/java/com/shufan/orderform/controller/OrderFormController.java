@@ -70,6 +70,7 @@ public class OrderFormController {
 			ModelMap model = new ModelMap();
 			model.put("data", datas);
 			model.put("userId", userId);
+			model.put("month", month);
 			return new ModelAndView("order_manager.vm",model);
 		}finally{
 			CloseUtil.close(context);
