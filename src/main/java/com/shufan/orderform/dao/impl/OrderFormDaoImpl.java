@@ -77,7 +77,7 @@ public class OrderFormDaoImpl implements OrderFormDao {
 			cal.set(year, month, 1,0,0,0);
 			java.util.Date uEnd = cal.getTime();
 			Date end = new Date(uEnd.getTime());;
-			IDBFilter filter = new SQLDBFilter(" and USERID = ? and DISPATCHINGDATE > ? and DISPATCHINGDATE < ? ", new Object[]{userId,start,end});
+			IDBFilter filter = new SQLDBFilter(" and USERID = ? and DISPATCHINGDATE >= ? and DISPATCHINGDATE < ? ", new Object[]{userId,start,end});
 			IDBResultSet result = dbm.select(context, getOrderFormTable(), filter, 31, 1);
 			return result;
 		} catch (Throwable e) {
