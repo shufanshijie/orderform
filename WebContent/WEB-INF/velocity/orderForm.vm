@@ -81,5 +81,12 @@
 <script type="text/javascript" src="http://localhost:8080/orderform/js/jquery-2.1.4.js"></script>
 <script type="text/javascript" src="http://localhost:8080/orderform/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="http://localhost:8080/orderform/js/meat.js"></script>
+<script type="text/javascript">
+	var date=new Date('$head.DISPATCHINGDATE');
+	if(date.getTime()<=new Date().getTime()){
+		$('footer').find('a').html('去评价');
+		$('footer').find('a').attr('href','/product/share_evaluate.html');
+	}
+</script>
 </body>
 </html>
