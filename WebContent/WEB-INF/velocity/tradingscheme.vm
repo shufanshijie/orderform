@@ -133,7 +133,6 @@
 				</div>
 				
 				<div class="contact_you">
-					<!--<li class="contact_item"><span class="addon">楼宇</span><div class="item_value"></div></li>-->
 					<form class="PageOff" action="http://localhost:8080/orderform/orderForm_pay" method="post">
 						<div class="input-group">
 					         <span class="input-group-addon">楼宇　</span>
@@ -146,9 +145,6 @@
 					         	<option>7:00~8:00</option>
 					         	<option>9:00~10:00</option>
 					         </select>
-					         <!-- 
-					         <input type="text" class="form-control" placeholder="时间"  name="DISPATCHINGDATE">
-					     		 -->
 					      </div>
 						<div class="input-group">
 					         <span class="input-group-addon">手机　</span>
@@ -175,8 +171,7 @@
 						<input class="createdate"  type="hidden" name="createdate"  value="">
 						<input class="paydate"  type="hidden" name="paydate"  value="">
 						<input class="dealdate"  type="hidden" name="dealdate"  value="">
-						<input class="wfbillid"  type="hidden" name="wfbillid"  value="">
-						<input class="hyversion"  type="hidden" name="hyversion"  value="">
+						<input class="addrid"  type="hidden" name="addrid"  value="">
 					</form>
 				     
 				     
@@ -229,6 +224,7 @@
 					$('.take_food_ways').hide();
 				}
 				if($(event.target).hasClass('btn-footer')){
+					saveAddress();
 					$('.PageOff').submit();
 				}
 				
@@ -251,14 +247,36 @@
 		});
 		$.getJSON('http://localhost:8080/usercenter/addr/wx/$userid?jsonCallBack=?', function(data) {
             if (data.addr) {
-                $('#building').val(data.addr.DISPATCHINGADDRESS);
-                $('#dispatching-date').val(data.addr.DISPATCHINGDATE);
-                $('#mobile').val(data.addr.MOBILE);
-                $('#username').val(data.addr.USERNAME);
+            	$('input[name="DISPATCHINGADDRESS"]').val(data.addr.ADDRESS);
+                $('input[name="mobile"]').val(data.addr.MOBILE);
+                $('input[name="username"]').val(data.addr.NAME);
+                $('.addrid').val(data.addr.ID);
             }
         });
-        function saveAddress(param){
-        	alert('saveAddress');
+        function saveAddress(){
+        	var id = $('#addrid').val();
+        	var params = {'ADDRESS':$('input[name="DISPATCHINGADDRESS"]').val()
+        			,'MOBILE':$('input[name="mobile"]').val(),'NAME':$('input[name="username"]').val()
+        			,'USERID':$('.userid').val()};
+        	var url;
+        	if(id){
+        		params.ID = id;
+    			url = 'http://localhost:8080/usercenter/addr/update';
+        	}else{
+        		url = 'http://localhost:8080/usercenter/addr/add';
+        	}
+        	$.ajax({
+				async : true,
+				url : url,
+				type : 'post',
+				dataType : 'json',
+				data : params,
+				timeout : 5000,
+				crossdomain : true,
+				success : function(json) {
+					alert('success');
+				}
+			});
         }
 	</script>
 </body>
