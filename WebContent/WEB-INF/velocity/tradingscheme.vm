@@ -249,7 +249,7 @@
 								}
 							});
 		});
-		$.getJSON('http://localhost:8080/usercenter/addr/wx/123?jsonCallBack=?', function(data) {
+		$.getJSON('http://localhost:8080/usercenter/addr/wx/$userid?jsonCallBack=?', function(data) {
             if (data.addr) {
                 $('#building').val(data.addr.DISPATCHINGADDRESS);
                 $('#dispatching-date').val(data.addr.DISPATCHINGDATE);

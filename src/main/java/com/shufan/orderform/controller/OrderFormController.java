@@ -76,6 +76,19 @@ public class OrderFormController {
 		}
 	}
 	/**
+	 * 根据用户Id分页获取用户订单列表
+	 * @param req
+	 * @param res
+	 * @return
+	 */
+	@RequestMapping(value = "orderForms/{userID}", method = RequestMethod.GET)
+	public ModelAndView orderFormListByUser(HttpServletRequest req, HttpServletResponse res
+			,@PathVariable("userID")String userId){
+		Integer year = Calendar.getInstance().get(Calendar.YEAR);
+		Integer month = Calendar.getInstance().get(Calendar.MONTH)+1;
+		return orderFormList(req,res,userId,year,month);
+	}
+	/**
 	 * 根据订单ID获取订单页面
 	 * @param req
 	 * @param res

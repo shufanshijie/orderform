@@ -46,10 +46,10 @@
 <meta name="apple-mobile-web-app-title" content="餐餐">
 
 
-<link href="../../../bootstrap/css/bootstrap.min.css" rel="stylesheet"
+<link href="http://test.5proapp.com:8888/orderform/bootstrap/css/bootstrap.min.css" rel="stylesheet"
 	type="text/css">
-<link rel="stylesheet" href="../../../css/kenel.css">
-<link rel="stylesheet" href="../../../css/smart.css">
+<link rel="stylesheet" href="http://test.5proapp.com:8888/orderform/css/kenel.css">
+<link rel="stylesheet" href="http://test.5proapp.com:8888/orderform/css/smart.css">
 </head>
 
 <body class="ng-scope">
@@ -72,9 +72,9 @@
 			</footer>
 		</div>
 	</div>
-	<script type="text/javascript" src="../../../js/jquery-2.1.4.js"></script>
-	<script type="text/javascript" src="../../../bootstrap/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="../../../js/meat.js"></script>
+	<script type="text/javascript" src="http://test.5proapp.com:8888/orderform/js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="http://test.5proapp.com:8888/orderform/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="http://test.5proapp.com:8888/orderform/js/meat.js"></script>
 	<script type="text/javascript">
 		$(document).click(function(event){
 			if($(event.target).parents('.day').length>0){
@@ -82,16 +82,16 @@
 				var meal = $ele.attr('meal');
 				if($ele.html()=="完"){
 					//window.location.href='../share_evaluate.html';
-					window.location.href='../../../orderForm/$userId/'+meal;
+					window.location.href='http://test.5proapp.com:8888/orderform/orderForm/$userId/'+meal;
 				}else if($ele.html()=="定"){
 					//window.location.href='../show_order.html';
-					window.location.href='../../../orderForm/$userId/'+meal;
+					window.location.href='http://test.5proapp.com:8888/orderform/orderForm/$userId/'+meal;
 				}
 			}
 		});
 		
 		function openToday(){
-			window.location.href='../../../showTodayCode/$userId/'+ $('footer').attr('meal');
+			window.location.href='http://test.5proapp.com:8888/orderform/showTodayCode/$userId/'+ $('footer').attr('meal');
 		}
 		
 		var data = $data;
