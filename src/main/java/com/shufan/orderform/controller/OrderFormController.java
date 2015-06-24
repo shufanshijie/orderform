@@ -4,12 +4,10 @@ import haiyan.bill.database.DBBill;
 import haiyan.common.CloseUtil;
 import haiyan.common.exception.Warning;
 import haiyan.common.intf.database.IDBBill;
-import haiyan.common.intf.database.IDBFilter;
 import haiyan.common.intf.database.orm.IDBRecord;
 import haiyan.common.intf.database.orm.IDBResultSet;
 import haiyan.common.intf.web.IWebContext;
 import haiyan.orm.database.DBPage;
-import haiyan.orm.database.sql.SQLDBFilter;
 import haiyan.web.orm.RequestRecord;
 import haiyan.web.session.WebContextFactory;
 
@@ -236,7 +234,7 @@ public class OrderFormController {
 				record.set("ID",id);
 				//TODO 是否支付完成
 				record.set("STATUS", OrderStatus.RECEIPT.toString());//将订单状态设置成收货状态
-				record = dao.updateOrderForm(record,null);
+				record = dao.updateOrderForm(record);
 			} catch (Throwable e) {
 				throw new Warning(500,e);
 			}
@@ -273,7 +271,7 @@ public class OrderFormController {
 				record = new RequestRecord(req, res, dao.getOrderFormTable());
 				//TODO 必填项是填写，金额是否正确
 				record.set("STATUS", OrderStatus.UNPAID.toString());//将订单状态设置成未支付状态
-				record = dao.createOrderForm(record);
+				//TODO 新增订单
 			} catch (Throwable e) {
 				throw new Warning(500,e);
 			}
@@ -308,8 +306,7 @@ public class OrderFormController {
 //				record.set("DISPATCHINGTYPE", req.getParameter("dispatchingtype"));
 				//TODO 是否支付完成
 				record.set("STATUS", OrderStatus.PAID.toString());//将订单状态设置成支付状态
-				IDBFilter filter = new SQLDBFilter(" and LOTNO = ?", new Object[]{req.getSession().getAttribute("lotNo")});
-				record = dao.updateOrderForm(record,filter);//很不雅
+				record = dao.updateOrderFormByLotNo(record,(String)req.getSession().getAttribute("lotNo"));
 			} catch (Throwable e) {
 				throw new Warning(500,e);
 			}
@@ -371,7 +368,7 @@ public class OrderFormController {
 				try {
 					record = new RequestRecord(req, res, dao.getOrderFormTable());
 					record.set("STATUS", OrderStatus.RECEIPT.toString());//将订单状态设置成已收货
-					record = dao.updateOrderForm(record,null);
+					record = dao.updateOrderForm(record);
 					ModelMap model = new ModelMap();
 					model.put("STATUS",record.get("STATUS"));
 					return model;
@@ -411,7 +408,7 @@ public class OrderFormController {
 						return model;
 					}
 				}
-				record = dao.updateOrderForm(record,null);
+				record = dao.updateOrderForm(record);
 				model.put("STATUS",record.get("STATUS"));
 				return model;
 			} catch (Throwable e) {

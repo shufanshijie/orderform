@@ -80,18 +80,13 @@
 			if($(event.target).parents('.day').length>0){
 				var $ele = $(event.target).parents('.day').find('.status');
 				var meal = $ele.attr('meal');
-				if($ele.html()=="完"){
-					//window.location.href='../share_evaluate.html';
-					window.location.href='http://test.5proapp.com:8888/orderform/orderForm/$userId/'+meal;
-				}else if($ele.html()=="定"){
-					//window.location.href='../show_order.html';
-					window.location.href='http://test.5proapp.com:8888/orderform/orderForm/$userId/'+meal;
-				}
+				if(meal)
+					window.location.href='http://localhost:8080/orderform/orderForm/$userId/'+meal;
 			}
 		});
 		
 		function openToday(){
-			window.location.href='../../../showTodayCode/$userId/'+ $('footer').attr('meal');
+			window.location.href='http://localhost:8080/orderform/showTodayCode/$userId/'+ $('footer').attr('meal');
 		}
 		
 		var data = $data;
@@ -100,7 +95,7 @@
 		var today=new Date();
 		if(!data[today.getDate()]){
 			$('footer a').html("去定餐");
-			$('footer a').attr("href","/product/mealHome");
+			$('footer a').attr("href","http://test.5proapp.com:8888/product/mealHome?openID=$userId");
 			$('footer a')[0].onclick=null;
 		}else{
 			$('footer').attr('meal',data[today.getDate()]);

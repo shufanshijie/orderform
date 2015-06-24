@@ -76,7 +76,7 @@ public class OrderFormDaoImpl implements OrderFormDao {
 			Date start = new Date(uStart.getTime());
 			cal.set(year, month, 1,0,0,0);
 			java.util.Date uEnd = cal.getTime();
-			Date end = new Date(uEnd.getTime());;
+			Date end = new Date(uEnd.getTime());
 			IDBFilter filter = new SQLDBFilter(" and USERID = ? and DISPATCHINGDATE >= ? and DISPATCHINGDATE < ? ", new Object[]{userId,start,end});
 			IDBResultSet result = dbm.select(context, getOrderFormTable(), filter, 31, 1);
 			return result;
@@ -110,13 +110,13 @@ public class OrderFormDaoImpl implements OrderFormDao {
 	}
 
 	@Override
-	public IDBRecord createOrderForm(IDBRecord orderForm) {
+	public IDBRecord updateOrderForm(IDBRecord orderForm) {
 		ITableDBContext context = null;
 		ITableDBManager dbm = null;
 		try {
 			context = TableDBContextFactory.createDBContext(parentContext);
 			dbm = context.getDBM();
-			IDBRecord record = dbm.insert(context, getOrderFormTable(), orderForm);
+			IDBRecord record = dbm.update(context, getOrderFormTable(), orderForm);
 			return record;
 		} catch (Throwable e) {
 			throw Warning.wrapException(e);
@@ -127,12 +127,13 @@ public class OrderFormDaoImpl implements OrderFormDao {
 	}
 
 	@Override
-	public IDBRecord updateOrderForm(IDBRecord orderForm,IDBFilter filter) {
+	public IDBRecord updateOrderFormByLotNo(IDBRecord orderForm,String lotNo) {
 		ITableDBContext context = null;
 		ITableDBManager dbm = null;
 		try {
 			context = TableDBContextFactory.createDBContext(parentContext);
 			dbm = context.getDBM();
+			IDBFilter filter = new SQLDBFilter(" and LOTNO = ?", new Object[]{lotNo});
 			IDBRecord record = dbm.update(context, getOrderFormTable(), orderForm,filter);
 			return record;
 		} catch (Throwable e) {
@@ -143,22 +144,6 @@ public class OrderFormDaoImpl implements OrderFormDao {
 		}
 	}
 
-	@Override
-	public boolean deleteOrderForm(String[] orderFormIds) {
-		ITableDBContext context = null;
-		ITableDBManager dbm = null;
-		try {
-			context = TableDBContextFactory.createDBContext(parentContext);
-			dbm = context.getDBM();
-			boolean record = dbm.delete(context, getOrderFormTable(), orderFormIds);
-			return record;
-		} catch (Throwable e) {
-			throw Warning.wrapException(e);
-		}finally{
-			CloseUtil.close(dbm);
-			CloseUtil.close(context);
-		}
-	}
 	@Override
 	public IDBBill addOrderForm(IDBBill bill) throws Throwable {
 		IBillDBContext context = null;
