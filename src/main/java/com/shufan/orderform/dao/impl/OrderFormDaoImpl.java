@@ -1,11 +1,13 @@
 package com.shufan.orderform.dao.impl;
 
 import haiyan.bill.database.BillDBContextFactory;
+import haiyan.bill.database.DBBill;
 import haiyan.bill.database.IBillDBManager;
 import haiyan.bill.database.sql.IBillDBContext;
 import haiyan.common.CloseUtil;
 import haiyan.common.exception.Warning;
 import haiyan.common.intf.config.IBillConfig;
+import haiyan.common.intf.config.IBillIDConfig;
 import haiyan.common.intf.database.IDBBill;
 import haiyan.common.intf.database.IDBFilter;
 import haiyan.common.intf.database.orm.IDBRecord;
@@ -64,7 +66,7 @@ public class OrderFormDaoImpl implements OrderFormDao {
 	}
 
 	@Override
-	public IDBResultSet getOrderList(String userId, int year, int month) {
+	public IDBResultSet getOrderListByMonth(String userId, int year, int month) {
 		ITableDBContext context = null;
 		ITableDBManager dbm = null;
 		try {
@@ -87,9 +89,34 @@ public class OrderFormDaoImpl implements OrderFormDao {
 			CloseUtil.close(context);
 		}
 	}
+	
+	@Override
+	public IDBResultSet getOrderListByDay(String userId, int year, int month,int day) {
+		ITableDBContext context = null;
+		ITableDBManager dbm = null;
+		try {
+			context = TableDBContextFactory.createDBContext(parentContext);
+			dbm = context.getDBM();
+			Calendar cal = Calendar.getInstance();
+			cal.set(year, month-1, day,0,0,0);
+			java.util.Date uStart = cal.getTime();
+			Date start = new Date(uStart.getTime());
+			cal.set(year, month-1, day+1,0,0,0);
+			java.util.Date uEnd = cal.getTime();
+			Date end = new Date(uEnd.getTime());
+			IDBFilter filter = new SQLDBFilter(" and USERID = ? and DISPATCHINGDATE >= ? and DISPATCHINGDATE < ? ", new Object[]{userId,start,end});
+			IDBResultSet result = dbm.select(context, getOrderFormTable(), filter, 31, 1);
+			return result;
+		} catch (Throwable e) {
+			throw Warning.wrapException(e);
+		}finally{
+			CloseUtil.close(dbm);
+			CloseUtil.close(context);
+		}
+	}
 
 	@Override
-	public IDBRecord getOrderForm(String userId,String orderId) {
+	public IDBRecord getOrderFormHead(String userId,String orderId) {
 		ITableDBContext context = null;
 		ITableDBManager dbm = null;
 		try {
@@ -108,9 +135,30 @@ public class OrderFormDaoImpl implements OrderFormDao {
 			CloseUtil.close(context);
 		}
 	}
+	
+	@Override
+	public IDBBill getOrderForm(String userId, String orderId) {
+		IBillDBContext context = null;
+		IBillDBManager bbm = null;
+		try {
+			context = BillDBContextFactory.createBillDBContext(parentContext,getSetMealBill());
+			bbm = context.getBBM();
+			IDBBill bill = new DBBill(context.getUser(), getSetMealBill());
+			bill.setBillID(orderId);
+			IBillIDConfig idConf = ConfigUtil.getBillIDConfig(bill.getBillConfig(), 0);
+			bill.setDBFilter(0, new SQLDBFilter(" and "+idConf.getDbName()+" = ? and USERID = ? ", new Object[]{orderId,userId}));
+			bbm.loadBill(context, bill);;
+			return bill;
+		} catch (Throwable e) {
+			throw Warning.wrapException(e);
+		}finally{
+			CloseUtil.close(bbm);
+			CloseUtil.close(context);
+		}
+	}
 
 	@Override
-	public IDBRecord updateOrderForm(IDBRecord orderForm) {
+	public IDBRecord updateOrderFormHead(IDBRecord orderForm) {
 		ITableDBContext context = null;
 		ITableDBManager dbm = null;
 		try {
@@ -127,7 +175,7 @@ public class OrderFormDaoImpl implements OrderFormDao {
 	}
 
 	@Override
-	public IDBRecord updateOrderFormByLotNo(IDBRecord orderForm,String lotNo) {
+	public IDBRecord updateOrderFormHeadByLotNo(IDBRecord orderForm,String lotNo) {
 		ITableDBContext context = null;
 		ITableDBManager dbm = null;
 		try {
@@ -214,5 +262,6 @@ public class OrderFormDaoImpl implements OrderFormDao {
 			CloseUtil.close(context);
 		}
 	}
+	
 
 }

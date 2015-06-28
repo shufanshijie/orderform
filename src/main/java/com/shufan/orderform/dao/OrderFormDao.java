@@ -19,27 +19,43 @@ public interface OrderFormDao {
 	 * @param month
 	 * @return
 	 */
-	public abstract IDBResultSet getOrderList(String userId,int year,int month);
+	public abstract IDBResultSet getOrderListByMonth(String userId,int year,int month);
+	/**
+	 * 根据用户ID取某一天的订单头信息
+	 * @param userId
+	 * @param year
+	 * @param month
+	 * @param day
+	 * @return
+	 */
+	public abstract IDBResultSet getOrderListByDay(String userId,int year,int month,int day);
 	/**
 	 * 根据用户ID订单ID查询订单头信息
 	 * @param userId
 	 * @param orderId
 	 * @return
 	 */
-	public abstract IDBRecord getOrderForm(String userId,String orderId);
+	public abstract IDBRecord getOrderFormHead(String userId,String orderId);
+	/**
+	 * 根据用户ID、订单ID查询订单信息
+	 * @param userId
+	 * @param orderId
+	 * @return
+	 */
+	public abstract IDBBill getOrderForm(String userId,String orderId);
 	/**
 	 * 根据订单ID修改订单头信息
 	 * @param orderForm
 	 * @return
 	 */
-	public abstract IDBRecord updateOrderForm(IDBRecord orderForm);
+	public abstract IDBRecord updateOrderFormHead(IDBRecord orderForm);
 	/**
 	 * 根据订单批号修改订单头信息
 	 * @param orderForm
 	 * @param lotNo
 	 * @return
 	 */
-	public abstract IDBRecord updateOrderFormByLotNo(IDBRecord orderForm,String lotNo);
+	public abstract IDBRecord updateOrderFormHeadByLotNo(IDBRecord orderForm,String lotNo);
 	/**
 	 * 新增订单
 	 * @param bill

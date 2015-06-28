@@ -46,7 +46,7 @@ import com.shufan.orderform.dao.impl.OrderFormDaoImpl;
 @Controller
 public class OrderFormController {
 	/**
-	 * 根据用户Id分页获取用户订单列表
+	 * 根据用户Id分页获取用户某一月订单列表
 	 * @param req
 	 * @param res
 	 * @return
@@ -58,7 +58,7 @@ public class OrderFormController {
 		try{
 			context= WebContextFactory.createDBContext(req, res);
 			OrderFormDao dao = new OrderFormDaoImpl(context);
-			IDBResultSet list = dao.getOrderList(userId, year, month);
+			IDBResultSet list = dao.getOrderListByMonth(userId, year, month);
 			Collection<IDBRecord> collection = list.getRecords();
 			JSONObject datas = new JSONObject();
 			for(IDBRecord record : collection){
@@ -75,7 +75,7 @@ public class OrderFormController {
 		}
 	}
 	/**
-	 * 根据用户Id分页获取用户订单列表
+	 * 根据用户Id分页获取用户当月订单列表
 	 * @param req
 	 * @param res
 	 * @return
@@ -86,6 +86,27 @@ public class OrderFormController {
 		Integer year = Calendar.getInstance().get(Calendar.YEAR);
 		Integer month = Calendar.getInstance().get(Calendar.MONTH)+1;
 		return orderFormList(req,res,userId,year,month);
+	}
+	/**
+	 * 根据用户Id分页获取用户某一天的订单
+	 * @param req
+	 * @param res
+	 * @return
+	 */
+	@RequestMapping(value = "orderForms/{userID}/{year}/{month}/{day}", method = RequestMethod.GET)
+	public ModelAndView orderFormListByDay(HttpServletRequest req, HttpServletResponse res
+			,@PathVariable("userID")String userId,@PathVariable("year")int year,@PathVariable("month")int month
+			,@PathVariable("day")int day){
+		IWebContext context = null;
+		try{
+			context= WebContextFactory.createDBContext(req, res);
+			OrderFormDao dao = new OrderFormDaoImpl(context);
+			IDBResultSet list = dao.getOrderListByDay(userId, year, month,day);
+			//TODO 
+			return null;
+		}finally{
+			CloseUtil.close(context);
+		}
 	}
 	/**
 	 * 根据订单ID获取订单页面
@@ -100,18 +121,15 @@ public class OrderFormController {
 		try{
 			context = WebContextFactory.createDBContext(req, res);
 			OrderFormDao dao = new OrderFormDaoImpl(context);
-			IDBBill bill = new DBBill(context.getUser(), dao.getSetMealBill());
-			bill.setBillID(orderFormId);
-			bill = dao.selectOrderForm(bill);
+			IDBBill bill = dao.getOrderForm(userId, orderFormId);
 			IDBResultSet head = bill.getResultSet(0);
 			ModelMap model = new ModelMap();
 			if(head.getRecordCount()>0){
 				IDBRecord headRecord = head.getRecord(0);
-				if(!userId.equals(headRecord.getString("USERID"))){
-					return new ModelAndView("404.html");
-				}
 				model.put("head", headRecord.getDataMap());
 				model.put("detail", bill.getResultSet(1).getRecords());
+			}else{
+				return new ModelAndView("404.html");
 			}
 			return new ModelAndView("orderForm.vm",model);
 		} catch (Throwable e) {
@@ -119,7 +137,12 @@ public class OrderFormController {
 		}finally{
 			CloseUtil.close(context);
 		}
-	}	
+	}
+	/**
+	 * 
+	 * @param req
+	 * @param res
+	 */
 	@RequestMapping(value = "orderForm_complete", method = RequestMethod.POST)
 	public void completeOrderForm(HttpServletRequest req, HttpServletResponse res){
 		IWebContext context = null;
@@ -195,11 +218,11 @@ public class OrderFormController {
 	}
 	/**
 	 * 创建订单页面
+	 * TODO 保存数据库的时机,现在在completeOrderForm中一次搞定的，这里没被调用
 	 * @param req
 	 * @param res
 	 * @return
 	 */
-	
 	@RequestMapping(value = "orderForm/create", method = RequestMethod.POST)
 	public ModelAndView createOrderForm(HttpServletRequest req, HttpServletResponse res){
 		IWebContext context = null;
@@ -220,7 +243,12 @@ public class OrderFormController {
 			CloseUtil.close(context);
 		}
 	}
-	
+	/**
+	 * 订单状态改为已收货
+	 * @param req
+	 * @param res
+	 * @return
+	 */
 	@RequestMapping(value = "orderForm_finish", method = RequestMethod.GET)
 	public ModelAndView finishOrderForm(HttpServletRequest req, HttpServletResponse res){
 		IWebContext context = null;
@@ -232,9 +260,8 @@ public class OrderFormController {
 			try {
 				record = new RequestRecord(req, res, dao.getOrderFormTable());
 				record.set("ID",id);
-				//TODO 是否支付完成
 				record.set("STATUS", OrderStatus.RECEIPT.toString());//将订单状态设置成收货状态
-				record = dao.updateOrderForm(record);
+				record = dao.updateOrderFormHead(record);
 			} catch (Throwable e) {
 				throw new Warning(500,e);
 			}
@@ -306,7 +333,7 @@ public class OrderFormController {
 //				record.set("DISPATCHINGTYPE", req.getParameter("dispatchingtype"));
 				//TODO 是否支付完成
 				record.set("STATUS", OrderStatus.PAID.toString());//将订单状态设置成支付状态
-				record = dao.updateOrderFormByLotNo(record,(String)req.getSession().getAttribute("lotNo"));
+				record = dao.updateOrderFormHeadByLotNo(record,(String)req.getSession().getAttribute("lotNo"));
 			} catch (Throwable e) {
 				throw new Warning(500,e);
 			}
@@ -338,7 +365,7 @@ public class OrderFormController {
 			OrderFormDao dao = new OrderFormDaoImpl(context);
 //			String queryString = req.getQueryString();
 //			String orderId = queryString.substring(queryString.indexOf("=")+1);
-			IDBRecord orderForm = dao.getOrderForm(userId,orderId);
+			IDBRecord orderForm = dao.getOrderFormHead(userId,orderId);
 			if(orderForm==null ){
 				res.setStatus(400);
 				return new ModelAndView("404.html");
@@ -368,7 +395,7 @@ public class OrderFormController {
 				try {
 					record = new RequestRecord(req, res, dao.getOrderFormTable());
 					record.set("STATUS", OrderStatus.RECEIPT.toString());//将订单状态设置成已收货
-					record = dao.updateOrderForm(record);
+					record = dao.updateOrderFormHead(record);
 					ModelMap model = new ModelMap();
 					model.put("STATUS",record.get("STATUS"));
 					return model;
@@ -408,7 +435,7 @@ public class OrderFormController {
 						return model;
 					}
 				}
-				record = dao.updateOrderForm(record);
+				record = dao.updateOrderFormHead(record);
 				model.put("STATUS",record.get("STATUS"));
 				return model;
 			} catch (Throwable e) {
